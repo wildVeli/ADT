@@ -1,0 +1,42 @@
+
+Principal
+	-Reestructurar
+
+
+Menú
+	-Mirar cambio a jbuttons, se fastidia la sombra
+	-LOS OTROS DOS SON JLBELS
+	-Usuario conectado
+	-Amigos
+	
+PersonalMouseListener
+	-Reestructurar
+
+
+
+Terminado(en espera de modificar para BDA)
+
+
+
+-JDialogNuevaLista
+	-Añadir/borrar registros en base de datos
+	
+Recomendaciones
+	-Datos de la base de datos
+	-Imagenes o botones para las opciones de añadir y borrar
+	-Decidir diseño final de la tabla
+	
+Listado
+	-Botones de Modificar y Recomendar a amigo, base de datos
+
+
+Terminado(en espera de BDA)
+
+	
+-JPanelCalendario
+	-Cambiar registros en tablas cuando se añadan de la base de datos en nuevoCalendario
+-JDialogNuevoCalendario
+	-Boton Ver 
+-TopBar
+-JPanelLogin
+-JDialogRegistro
