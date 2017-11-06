@@ -31,6 +31,9 @@ public class Pelicula extends Contenido {
 		super();
 		// End of user code
 	}
+	public Pelicula(String director ) {
+		this.director=director;
+	}
 
 	// Start of user code (user defined methods for Pelicula)
 

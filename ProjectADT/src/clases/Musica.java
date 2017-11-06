@@ -17,7 +17,7 @@ public class Musica extends Contenido {
 	/**
 	 * Description of the property tipo.
 	 */
-	private TipoMusica tipo = null;
+	private String tipo = "";
 
 	/**
 	 * Description of the property cantante.
@@ -31,6 +31,10 @@ public class Musica extends Contenido {
 	/**
 	 * The constructor.
 	 */
+	public Musica(String cantante,String tipo) {
+		this.cantante=cantante;
+		this.tipo=tipo;
+	}
 	public Musica() {
 		// Start of user code constructor for Musica)
 		super();
@@ -44,7 +48,7 @@ public class Musica extends Contenido {
 	 * Returns tipo.
 	 * @return tipo 
 	 */
-	public TipoMusica getTipo() {
+	public String getTipo() {
 		return this.tipo;
 	}
 
@@ -52,7 +56,7 @@ public class Musica extends Contenido {
 	 * Sets a value to attribute tipo. 
 	 * @param newTipo 
 	 */
-	public void setTipo(TipoMusica newTipo) {
+	public void setTipo(String newTipo) {
 		this.tipo = newTipo;
 	}
 

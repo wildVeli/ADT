@@ -2,10 +2,12 @@ package datos;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -21,6 +23,7 @@ public class DBObjectsManager {
 	private String dbName;
 	private String dbUserName;
 	private String dbPassword;
+	private String dbPort;
 	
 	/**
 	 * Abre un flujo para recoger del archivo config varios parametros y pasarlos a atributos que luego se utilizarán para conectarse a la base de datos
@@ -37,6 +40,7 @@ public class DBObjectsManager {
 				dbName = config.getProperty("dbname");
 				dbUserName = config.getProperty("username");
 				dbPassword = config.getProperty("password");
+				dbPort=config.getProperty("dbPort");
 			} finally {
 				if(input != null)
 					input.close();
@@ -50,8 +54,8 @@ public class DBObjectsManager {
 	 */
 	private void connect() throws SQLException, ClassNotFoundException {
 		
-		Class.forName("com.mysql.jdbc.Driver");
-		String url = "jdbc:mysql://" + dbHost + "/" + dbName;
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		String url = "jdbc:oracle:thin:@" + dbHost + ":"+dbPort+":"+ dbName;
 		con = DriverManager.getConnection(url, dbUserName, dbPassword);
 	}
 	/**
@@ -78,8 +82,44 @@ public class DBObjectsManager {
 	 * @return devuelve si existe en la base de datos
 	 */
 	public boolean validarUsuario(String nombreUsuario, String password, String tipoAccion) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resultado=true;
+		String call;
+		CallableStatement cs;
+		try {
+			this.connect();
+			if(tipoAccion.equals("registro")) {
+				call = "{ ? = call existeUsuario(?) }";
+	            cs = con.prepareCall(call);	            	            
+			}else {
+				call = "{ ? = call existeUsuarioyPass(?,?) }";
+	            cs = con.prepareCall(call);        
+	            cs.setString(3,password);
+	           
+			}
+			cs.setQueryTimeout(1800);
+			cs.setString(2,nombreUsuario);
+            //Utilizar las funciones que devuelvan boolean "java.sql.Types.BOOLEAN " no esta soportado
+            //Referencia https://docs.oracle.com/cd/E11882_01/java.112/e16548/apxref.htm#JJDBC28928
+            //Debido a eso las funciones retornan integers 1 para true 0 para false
+			cs.registerOutParameter(1, java.sql.Types.INTEGER);
+			cs.execute();
+            
+            resultado=cs.getBoolean(1);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				this.disconnect();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return resultado;
 	}
 	/**
 	 * Método que registra a un usuario en la base de datos
@@ -87,7 +127,29 @@ public class DBObjectsManager {
 	 * @param password contraseña del usuario que se registra
 	 */
 	public void registrarUsuario(String nombreUsuario, String password) {
-		// TODO Auto-generated method stub
+		try {
+			this.connect();
+			String call = "{ call crearUsuario(?,?) }";
+			CallableStatement cs = con.prepareCall(call);	            	            
+			cs.setQueryTimeout(1800);
+			cs.setString(1,nombreUsuario);
+			cs.setString(2,password);
+			cs.execute();
+            
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				this.disconnect();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	//CONTENIDOS-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -122,10 +184,11 @@ public class DBObjectsManager {
 	/**
 	 * Método que añadira un nuevo contenido a un usuario
 	 * @param nombreUsuario nombre del usuario al cual se le añadira el nuevo contenido
+	 * @param tipoContenido tipo de contenido que se va a guardar, puede contener los valores "Serie", "Película", "Música", "Libro"
 	 * @param contenido contenido que se añadira al usuario
 	 */
-	public void anadirNuevoContenido(String nombreUsuario, Contenido contenido) {
-		// TODO Auto-generated method stub
+	public void anadirNuevoContenido(String nombreUsuario, Contenido contenido, String tipoContenido) {
+
 		
 	}
 	/**

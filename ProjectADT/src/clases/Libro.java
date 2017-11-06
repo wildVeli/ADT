@@ -31,6 +31,9 @@ public class Libro extends Contenido {
 		super();
 		// End of user code
 	}
+	public Libro(String autor) {
+		this.autor=autor;
+	}
 
 	// Start of user code (user defined methods for Libro)
 

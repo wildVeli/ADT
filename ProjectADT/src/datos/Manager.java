@@ -21,7 +21,7 @@ public class Manager {
 	 * @throws IOException 
 	 */
 	public boolean validarUsuario(String nombreUsuario,String password,String tipoAccion,short tipo) throws IOException  {
-		boolean existe=false;
+		boolean existe=true;
 		switch(tipo){
 		
 			case 1:
@@ -130,14 +130,15 @@ public class Manager {
 	 *  Método que llama al método anadirNuevoContenido del Manager correspondiente
 	 * @param nombreUsuario nombre del usuario que efectua la acción
 	 * @param contenido contenido que se añadira a la lista del usuario
+ @param tipoContenido tipo de contenido que se va a guardar, puede contener los valores "Serie", "Película", "Música", "Libro"
 	 * @param tipo que base de datos se utiliza
 	 * @throws IOException 
 	 */
-	public void anadirNuevoContenido (String nombreUsuario,Contenido contenido,short tipo) throws IOException {
+	public void anadirNuevoContenido (String nombreUsuario,Contenido contenido,String tipoContenido,short tipo) throws IOException {
 		switch(tipo){
 		case 1:
 			DBObjectsManager dbManager = new DBObjectsManager();
-			dbManager.anadirNuevoContenido(nombreUsuario,contenido);
+			dbManager.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 2:
 			break;

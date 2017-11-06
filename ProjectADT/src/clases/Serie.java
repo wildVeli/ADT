@@ -17,7 +17,7 @@ public class Serie extends Contenido {
 	/**
 	 * Description of the property temporadas.
 	 */
-	private Integer temporadas = Integer.valueOf(0);
+	private Integer temporadas = 0;
 
 	// Start of user code (user defined attributes for Serie)
 
@@ -27,9 +27,10 @@ public class Serie extends Contenido {
 	 * The constructor.
 	 */
 	public Serie() {
-		// Start of user code constructor for Serie)
 		super();
-		// End of user code
+	}
+	public Serie(int temporadas) {
+		this.temporadas=temporadas;
 	}
 
 	// Start of user code (user defined methods for Serie)

@@ -152,14 +152,6 @@ public class JPanelLogin extends JPanel {
 			//Entra en la aplicación si el usuario y la contraseña son correctas
 			public void actionPerformed(ActionEvent e) {
 				
-				((JFramePrincipal) principal).getjPanelCalendario().setVisible(true);
-				((JFramePrincipal) principal).getjPanelListado().setVisible(false);
-				((JFramePrincipal) principal).getjPanelMenu().setVisible(true);
-				((JFramePrincipal) principal).getjPanelRecomendaciones().setVisible(false);
-				((JFramePrincipal) principal).getjPanelTopBar().setVisible(true);
-				((JFramePrincipal) principal).getjPanelLogin().setVisible(false);
-				JFramePrincipal.setUsuarioConectado(usuarioLogin.getText());
-				/*
 				//Si no ha seleccionado base de datos
 				if(JFramePrincipal.getTipo()==0) {
 					JOptionPane.showMessageDialog(principal, "Seleccione una base de datos");
@@ -182,8 +174,6 @@ public class JPanelLogin extends JPanel {
 						
 					}
 				}
-
-			*/
 			}
 		});
 		botonLogin.setBorder(null);

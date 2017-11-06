@@ -7,10 +7,19 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+
+import clases.Contenido;
+import clases.Libro;
+import clases.Musica;
+import clases.Pelicula;
+import clases.Serie;
+import datos.Manager;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 
 public class JDialogNuevoLista extends JDialog {
@@ -30,6 +39,8 @@ public class JDialogNuevoLista extends JDialog {
 	private JComboBox<String> comboBoxTipos;
 	private JTextField tFcantante;
 	private JComboBox<String> comboBoxTipoMusica;
+	private Manager manager=new Manager();
+	private JCheckBox cBfavoritos;
 	
 
 
@@ -173,9 +184,39 @@ public class JDialogNuevoLista extends JDialog {
 				if(comboBoxTipos.getSelectedIndex()==-1 || tFnombre.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Seleccione un tipo y rellene los campos obligatorios para añadir","Error",JOptionPane.ERROR_MESSAGE);
 				}else {
+					Contenido contenido=cargarContenido();
+					try {
+						manager.anadirNuevoContenido(JFramePrincipal.getUsuarioConectado(), contenido, comboBoxTipoMusica.getSelectedItem().toString(), JFramePrincipal.getTipo());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					//Añade lo efectuado a la base de datos
 				}
 				
+			}
+			/**
+			 * Carga los datos del tipo de contenido que ha elegido el usuario
+			 * @return devuelve el contenido que ha seleccionado el usuario cargado
+			 */
+			private Contenido cargarContenido() {
+				Contenido contenido;
+				String x = comboBoxTipos.getSelectedItem().toString();
+				//Carga los datos en contenido segun los distintos tipos que se hayan podido elegir
+				if(x.equals("Serie")) {
+					contenido=(Serie)new Serie(Integer.valueOf(tFtemporadas.getText()));
+				}else if(x.equals("Película")) {
+					contenido=new Pelicula(tFdirector.getText());
+				}else if(x.equals("Música")) {
+					contenido=new Musica(tFcantante.getText(),comboBoxTipoMusica.getSelectedItem().toString());
+				}else {
+					contenido=new Libro(tFautor.getText());
+				}
+				contenido.setNombre(tFnombre.getText());
+				contenido.setGenero(tFgenero.getText());
+				contenido.setPuntucacion(Short.valueOf(tFpuntuacion.getText()));
+				contenido.setRecomendado(cBfavoritos.isSelected());
+				return contenido;
 			}
 		});
 		//botonRegistrarNuevo.setBorder(null);
@@ -209,7 +250,7 @@ public class JDialogNuevoLista extends JDialog {
 	 * Creación y configuraciones de los checkbox de la ventana
 	 */
 	private void checkbox() {
-		JCheckBox cBfavoritos = new JCheckBox("");
+		cBfavoritos = new JCheckBox("");
 		cBfavoritos.setBounds(164, 224, 21, 23);
 		getContentPane().add(cBfavoritos);
 		
