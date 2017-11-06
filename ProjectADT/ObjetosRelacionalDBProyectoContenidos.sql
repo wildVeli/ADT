@@ -66,7 +66,7 @@ create type  tipoCalendarios as object(
 / 
 
 create table  calendarios of tipoCalendarios(
-	primary key (usu,dia)
+	--primary key (usu,dia)
 )NESTED TABLE serie STORE AS serie_anidada;
 / 
 
