@@ -110,19 +110,15 @@ public class JDialogRegistro extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				
 				//Comprobar en la base de datos si exite
-				try {
-					//Si existe le avisamos de que eliga otro nombre
-					if(manager.validarUsuario(textFieldUsuario.getText(),textFieldPassword.getText(), "registro", JFramePrincipal.getTipo())) {
-						JOptionPane.showMessageDialog(null, "Seleccione otro usuario, el seleccionado ya existe","Error",JOptionPane.ERROR_MESSAGE);
-					//si no existe lo registramos y cerramos la ventana
-					}else {
-						manager.registrarUsuario(textFieldUsuario.getText(), textFieldPassword.getText(),JFramePrincipal.getTipo());
-						dispose();
-					}
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				//Si existe le avisamos de que eliga otro nombre
+				if(manager.validarUsuario(textFieldUsuario.getText(),textFieldPassword.getText(), "registro", JFramePrincipal.getTipo())) {
+					JOptionPane.showMessageDialog(null, "Seleccione otro usuario, el seleccionado ya existe","Error",JOptionPane.ERROR_MESSAGE);
+				//si no existe lo registramos y cerramos la ventana
+				}else {
+					manager.registrarUsuario(textFieldUsuario.getText(), textFieldPassword.getText(),JFramePrincipal.getTipo());
+					dispose();
 				}
+
 			}
 		});
 		//botonRegistrarNuevo.setBorder(null);

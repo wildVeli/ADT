@@ -41,12 +41,14 @@ public class JDialogNuevoLista extends JDialog {
 	private JComboBox<String> comboBoxTipoMusica;
 	private Manager manager=new Manager();
 	private JCheckBox cBfavoritos;
+	private String tipoContenidoAModificar;
+	private Contenido contenidoAModificar;
 	
 
 
 	/**
 	 * Crea el dialogo que usa para añadir nuevos registros a la tabla de contenidos del usuario, se accede desde el panel de Listado
-	 * @param accion funcionalidad con la que se abrirá la ventana
+	 * @param accion indica la funcionalidad con la que se abrirá la ventana , "Añadir" en el caso de 1 solo parametro
 	 */
 	public JDialogNuevoLista(String accion) {
 		
@@ -63,10 +65,38 @@ public class JDialogNuevoLista extends JDialog {
 		
 		textFieds();
 		comboBox();
-		botones();
+		botones(accion);
 		checkbox();
 		labels();		
 		
+	}
+	/**
+	 * Crea el dialogo que usa para modificar registros de contenidos del usuario, se accede desde el panel de Listado
+	 * @param accion indica la funcionalidad con la que se abrirá la ventana , "Modificar" en el caso de 1 solo parametro
+	 * @param tipoContenidoAModificar especifica si es "Serie" ,"Película", "Libro" o "Música" el contenido que se va a modificar
+	 * @param contenido contenido que se va a modificar
+	 */
+	public JDialogNuevoLista(String accion,String tipoContenidoAModificar,Contenido contenidoAModificar) {
+
+		this.tipoContenidoAModificar=tipoContenidoAModificar;
+		this.contenidoAModificar=contenidoAModificar;
+		
+
+		getContentPane().setBackground(Color.LIGHT_GRAY);
+		setModal(true);
+
+		
+		setSize(600, 400);		
+		setLocationRelativeTo(null);
+
+		setUndecorated(true);
+		getContentPane().setLayout(null);
+		
+		textFieds();
+		comboBox();
+		botones(accion);
+		checkbox();
+		labels();	
 	}
 
 	/**
@@ -136,10 +166,10 @@ public class JDialogNuevoLista extends JDialog {
 
 	/**
 	 * Creación y configuración de botones(incluyendo sus listener)
+	 * @param accion 
 	 */
-	private void botones() {
+	private void botones(String accion) {
 		
-		//Tipo de contenido para añadir ,establece distintos campos habilitados según la opción
 		JButton btnElegir = new JButton("Elegir");
 		btnElegir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -177,22 +207,61 @@ public class JDialogNuevoLista extends JDialog {
 		btnElegir.setBounds(411, 61, 89, 23);
 		getContentPane().add(btnElegir);
 		
-		botonAnadirNuevo = new JButton("A\u00F1adir\r\n");
+
+		
+		//Tipo de contenido para añadir ,establece distintos campos habilitados según la opción
+		if(accion.equals("Modificar")) {
+			
+			comboBoxTipos.setEditable(false);
+			comboBoxTipos.setSelectedItem(tipoContenidoAModificar);
+			tFnombre.setText(contenidoAModificar.getNombre());
+			tFgenero.setText(contenidoAModificar.getGenero());
+			tFpuntuacion.setText(String.valueOf(contenidoAModificar.getPuntucacion()));
+			switch (tipoContenidoAModificar) {
+			case "Serie":
+				Serie serieAModificar= (Serie)contenidoAModificar;
+				tFtemporadas.setText(String.valueOf(serieAModificar.getTemporadas()));
+				break;
+			case "Película":
+				Pelicula peliculaAModificar= (Pelicula)contenidoAModificar;
+				tFdirector.setText(peliculaAModificar.getDirector());
+				break;
+			case "Libro":
+				Libro libroAModificar= (Libro)contenidoAModificar;
+				tFautor.setText(libroAModificar.getAutor());
+				break;
+			case "Música":
+				Musica musicaAModificar= (Musica)contenidoAModificar;
+				comboBoxTipoMusica.setSelectedItem(musicaAModificar.getTipo());
+				tFcantante.setText(musicaAModificar.getCantante());
+				break;
+			}
+			comboBoxTipos.setEnabled(false);
+			tFnombre.setEditable(false);
+			btnElegir.doClick();
+			btnElegir.setEnabled(false);
+			
+
+		}
+		botonAnadirNuevo = new JButton("");
+		botonAnadirNuevo.setText("Modificar");
 		botonAnadirNuevo.addActionListener(new ActionListener() {
 			//Añade los datos a la base de datos o da error si no se cumple lo minimo
 			public void actionPerformed(ActionEvent e) {
-				if(comboBoxTipos.getSelectedIndex()==-1 || tFnombre.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Seleccione un tipo y rellene los campos obligatorios para añadir","Error",JOptionPane.ERROR_MESSAGE);
-				}else {
+				if(accion.equals("Modificar")) {
 					Contenido contenido=cargarContenido();
-					try {
-						manager.anadirNuevoContenido(JFramePrincipal.getUsuarioConectado(), contenido, comboBoxTipoMusica.getSelectedItem().toString(), JFramePrincipal.getTipo());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					manager.modificarContenido(JFramePrincipal.getUsuarioConectado(),contenido , tipoContenidoAModificar, JFramePrincipal.getTipo());
+				}else {
+					if(comboBoxTipos.getSelectedIndex()==-1 || tFnombre.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Seleccione un tipo y rellene los campos obligatorios para añadir","Error",JOptionPane.ERROR_MESSAGE);
+					}else {
+						Contenido contenido=cargarContenido();
+						manager.anadirNuevoContenido(JFramePrincipal.getUsuarioConectado(), contenido, comboBoxTipos.getSelectedItem().toString(), JFramePrincipal.getTipo());
+
+						//Añade lo efectuado a la base de datos
 					}
-					//Añade lo efectuado a la base de datos
 				}
+
 				
 			}
 			/**
@@ -219,7 +288,6 @@ public class JDialogNuevoLista extends JDialog {
 				return contenido;
 			}
 		});
-		//botonRegistrarNuevo.setBorder(null);
 		botonAnadirNuevo.setFocusPainted(false);
 		botonAnadirNuevo.setRolloverEnabled(false);
 		botonAnadirNuevo.setContentAreaFilled(false);	
@@ -234,13 +302,12 @@ public class JDialogNuevoLista extends JDialog {
 				dispose();
 			}
 		});
-		//botonCancelar.setBorder(null);
 		botonCancelar.setBackground(Color.blue);
-		//botonCancelar.setFocusPainted(false);
 		botonCancelar.setRolloverEnabled(false);
 		botonCancelar.setContentAreaFilled(false);	
 		botonCancelar.setBounds(315, 363, 89, 23);
 		getContentPane().add(botonCancelar);
+		
 		
 	}
 
@@ -320,4 +387,5 @@ public class JDialogNuevoLista extends JDialog {
 		lblElCampoNombre.setBounds(66, 98, 434, 14);
 		getContentPane().add(lblElCampoNombre);
 	}
+
 }

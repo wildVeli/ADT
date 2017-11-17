@@ -92,8 +92,6 @@ public class JPanelCalendario extends JPanel {
 	private void tablaLunes() {
 
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-		try {
-		
 			Calendario[] x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 1, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
@@ -124,10 +122,7 @@ public class JPanelCalendario extends JPanel {
 			tablaLunes.setRowHeight(20);
 			tablaLunes.setTableHeader(null);
 		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 
 	
 }
@@ -135,9 +130,6 @@ public class JPanelCalendario extends JPanel {
 	private void tablaMartes() {
 		
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-
-		
-		try {
 			Calendario[] x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 2, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
@@ -163,17 +155,13 @@ public class JPanelCalendario extends JPanel {
 			tablaMartes.setRowHeight(20);
 			tablaMartes.setTableHeader(null);
 			tablaMartes.setEnabled(false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		
 	}
 
 	private void tablaMiercoles() {
 		
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-		try {
 			Calendario[] x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 3, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
@@ -198,16 +186,11 @@ public class JPanelCalendario extends JPanel {
 			tablaMiercoles.setRowHeight(20);
 			tablaMiercoles.setTableHeader(null);
 			tablaMiercoles.setEnabled(false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private void tablaJueves() {
 		
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-		try {
 			Calendario[] x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 4, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
@@ -232,17 +215,12 @@ public class JPanelCalendario extends JPanel {
 			tablaJueves.setRowHeight(20);
 			tablaJueves.setTableHeader(null);
 			tablaJueves.setEnabled(false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 
 	private void tablaViernes() {
 		
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-		try {
 			Calendario[] x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 5, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
@@ -267,16 +245,11 @@ public class JPanelCalendario extends JPanel {
 			tablaViernes.setRowHeight(20);
 			tablaViernes.setTableHeader(null);
 			tablaViernes.setEnabled(false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private void tablaSabado() {
 		
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-		try {
 			Calendario[] x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 6, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
@@ -301,16 +274,11 @@ public class JPanelCalendario extends JPanel {
 			tablaSabado.setRowHeight(20);
 			tablaSabado.setTableHeader(null);
 			tablaSabado.setEnabled(false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private void tablaDomingo() {
 		
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-		try {
 			Calendario[] x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 7, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
@@ -336,11 +304,6 @@ public class JPanelCalendario extends JPanel {
 			tablaDomingo.setTableHeader(null);
 			tablaDomingo.setEnabled(false);
 			
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 

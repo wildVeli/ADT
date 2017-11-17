@@ -10,6 +10,18 @@ import clases.Serie;
 public class Manager {
 
 	
+	private DBObjectsManager dbManager;
+	private DBmongo dbMongo;
+	
+	public Manager(){
+		try {
+			dbManager = new DBObjectsManager();
+			dbMongo = new DBmongo();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	//GESTIÓN DE USUARIO -----------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Método que llama al método validarUsuario del manager correspondiente
@@ -20,15 +32,15 @@ public class Manager {
 	 * @return devuelve si existe en la base de datos
 	 * @throws IOException 
 	 */
-	public boolean validarUsuario(String nombreUsuario,String password,String tipoAccion,short tipo) throws IOException  {
+	public boolean validarUsuario(String nombreUsuario,String password,String tipoAccion,short tipo)  {
 		boolean existe=true;
 		switch(tipo){
 		
-			case 1:
-				DBObjectsManager dbManager = new DBObjectsManager();
+			case 1:	
 				existe = dbManager.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 			case 2:
+				existe = dbMongo.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 			case 3:
 				break;
@@ -44,13 +56,13 @@ public class Manager {
 	 * @param tipo que base de datos se utilizará
 	 * @throws IOException 
 	 */
-	public void registrarUsuario(String nombreUsuario,String password,short tipo) throws IOException {
+	public void registrarUsuario(String nombreUsuario,String password,short tipo)  {
 		switch(tipo){
 			case 1:
-				DBObjectsManager dbManager = new DBObjectsManager();
 				dbManager.registrarUsuario(nombreUsuario, password);
 				break;
 			case 2:
+				dbMongo.registrarUsuario(nombreUsuario, password);
 				break;
 			case 3:
 				break;
@@ -68,14 +80,14 @@ public class Manager {
 	 * @return devuelve una lista del contenido del usuario de dicho tipo
 	 * @throws IOException 
 	 */
-	public ArrayList<Contenido> getContenidoDeUnTipo (String nombreUsuario,String tipoContenido,short tipo) throws IOException{
+	public ArrayList<Contenido> getContenidoDeUnTipo (String nombreUsuario,String tipoContenido,short tipo) {
 		ArrayList<Contenido> contenido = null;
 		switch(tipo){
 			case 1:
-				DBObjectsManager dbManager = new DBObjectsManager();
 				contenido=dbManager.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 			case 2:
+				contenido=dbMongo.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 			case 3:
 				break;
@@ -91,13 +103,13 @@ public class Manager {
 	 * @param tipo que base de datos se utiliza
 	 * @throws IOException 
 	 */
-	public void borrarContenidoSeleccionado (String nombreUsuario,String nombreContenido,short tipo) throws IOException {
+	public void borrarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo){
 		switch(tipo){
 		case 1:
-			DBObjectsManager dbManager = new DBObjectsManager();
 			dbManager.borrarContenidoSeleccionado(nombreUsuario,nombreContenido);
 			break;
 		case 2:
+			dbMongo.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 3:
 			break;
@@ -112,13 +124,13 @@ public class Manager {
 	 * @param tipo que base de datos se utiliza
 	 * @throws IOException 
 	 */
-	public void recomendarContenidoSeleccionado (String nombreUsuario,String nombreContenido,short tipo) throws IOException {
+	public void recomendarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo) {
 		switch(tipo){
 		case 1:
-			DBObjectsManager dbManager = new DBObjectsManager();
 			dbManager.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido);
 			break;
 		case 2:
+			dbMongo.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 3:
 			break;
@@ -130,17 +142,17 @@ public class Manager {
 	 *  Método que llama al método anadirNuevoContenido del Manager correspondiente
 	 * @param nombreUsuario nombre del usuario que efectua la acción
 	 * @param contenido contenido que se añadira a la lista del usuario
- @param tipoContenido tipo de contenido que se va a guardar, puede contener los valores "Serie", "Película", "Música", "Libro"
+ 		@param tipoContenido tipo de contenido que se va a guardar, puede contener los valores "Serie", "Película", "Música", "Libro"
 	 * @param tipo que base de datos se utiliza
 	 * @throws IOException 
 	 */
-	public void anadirNuevoContenido (String nombreUsuario,Contenido contenido,String tipoContenido,short tipo) throws IOException {
+	public void anadirNuevoContenido (String nombreUsuario,Contenido contenido,String tipoContenido,short tipo) {
 		switch(tipo){
 		case 1:
-			DBObjectsManager dbManager = new DBObjectsManager();
 			dbManager.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 2:
+			dbMongo.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 3:
 			break;
@@ -152,16 +164,18 @@ public class Manager {
 	 *  Método que llama al método modificarContenido del Manager correspondiente
 	 * @param nombreUsuario nombre del usuario que efectua la acción
 	 * @param contenido contenido modificado para sustituir al viejo
+	 * @param tipoContenido tipo de contenido que se va a guardar, puede contener los valores "Serie", "Película", "Música", "Libro"
 	 * @param tipo que base de datos se utiliza
 	 * @throws IOException 
 	 */
-	public void modificarContenido (String nombreUsuario,Contenido contenido,short tipo) throws IOException {
+	public void modificarContenido (String nombreUsuario,Contenido contenido,String tipoContenido,short tipo) {
 		switch(tipo){
 		case 1:
-			DBObjectsManager dbManager = new DBObjectsManager();
 			dbManager.modificarContenido(nombreUsuario,contenido);
 			break;
 		case 2:
+			dbMongo.modificarContenido(nombreUsuario,contenido, tipoContenido);
+
 			break;
 		case 3:
 			break;
@@ -179,14 +193,15 @@ public class Manager {
 	 * @return devuelve los calendarios que tiene el usuario
 	 * @throws IOException 
 	 */
-	public Calendario[] getCalendarios (String nombreUsuario,short calendario,short tipo) throws IOException {
+	public Calendario[] getCalendarios (String nombreUsuario,short calendario,short tipo) {
 		Calendario [] calendarios=new Calendario[7];
 		switch(tipo){
 			case 1:
-				DBObjectsManager dbManager = new DBObjectsManager();
 				calendarios=dbManager.getCalendarios(nombreUsuario,calendario);
 				break;
 			case 2:
+				calendarios=dbMongo.getCalendarios(nombreUsuario,calendario);
+
 				break;
 			case 3:
 				break;
@@ -203,13 +218,14 @@ public class Manager {
 	 * @param tipo que base de datos se utiliza
 	 * @throws IOException 
 	 */
-	public void borrarRegistroCalendario (String nombreUsuario,String registro,String dia,short tipo) throws IOException {
+	public void borrarRegistroCalendario (String nombreUsuario,String registro,String dia,short tipo)  {
 		switch(tipo){
 		case 1:
-			DBObjectsManager dbManager = new DBObjectsManager();
 			dbManager.borrarRegistroCalendario(nombreUsuario,dia,registro);
 			break;
 		case 2:
+			dbMongo.borrarRegistroCalendario(nombreUsuario,dia,registro);
+
 			break;
 		case 3:
 			break;
@@ -225,13 +241,14 @@ public class Manager {
 	 * @param tipo base de datos que se utiliza
 	 * @throws IOException 
 	 */
-	public void nuevoRegistroCalendario (String nombreUsuario,String registro,String dia,short tipo) throws IOException {
+	public void nuevoRegistroCalendario (String nombreUsuario,String registro,String dia,short tipo){
 		switch(tipo){
 			case 1:
-				DBObjectsManager dbManager = new DBObjectsManager();
 				dbManager.nuevoRegistroCalendario(nombreUsuario,dia,registro);
 				break;
 			case 2:
+				dbMongo.nuevoRegistroCalendario(nombreUsuario,dia,registro);
+
 				break;
 			case 3:
 				break;
@@ -247,14 +264,15 @@ public class Manager {
 	 * @return devuelve una lista de series
 	 * @throws IOException
 	 */
-	public ArrayList<Serie> getRecomendacionesAmigos (String nombreUsuario,short tipo) throws IOException {
+	public ArrayList<Serie> getRecomendacionesAmigos (String nombreUsuario,short tipo) {
 		ArrayList<Serie> series=new ArrayList<Serie>();
 		switch(tipo){
 			case 1:
-				DBObjectsManager dbManager = new DBObjectsManager();
 				series=dbManager.getRecomendacionesAmigos(nombreUsuario);
 				break;
 			case 2:
+				series=dbMongo.getRecomendacionesAmigos(nombreUsuario);
+
 				break;
 			case 3:
 				break;

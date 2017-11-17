@@ -69,13 +69,8 @@ public class JDialogNuevoCalendario extends JDialog {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					try {
-						manager.borrarRegistroCalendario(JFramePrincipal.getUsuarioConectado(), comboContenido.getSelectedItem().toString(), comboDiasSemana.getSelectedItem().toString(), JFramePrincipal.getTipo());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					
+					manager.borrarRegistroCalendario(JFramePrincipal.getUsuarioConectado(), comboContenido.getSelectedItem().toString(), comboDiasSemana.getSelectedItem().toString().toLowerCase(), JFramePrincipal.getTipo());
+
 				}
 			});
 			
@@ -83,17 +78,12 @@ public class JDialogNuevoCalendario extends JDialog {
 			JButton btnVer = new JButton("Ver");
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						Calendario[] calendario=new Calendario[1];
-						calendario=manager.getCalendarios(JFramePrincipal.getUsuarioConectado(),(short) (comboDiasSemana.getSelectedIndex()+1), JFramePrincipal.getTipo());
-						
-						ArrayList<Serie> x = calendario[1].getSeries();
-						for (short i = 0; i < x.size(); i++) {
-							comboContenido.setSelectedItem(x.get(i).getNombre().toString());
-						}
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					Calendario[] calendario=new Calendario[1];
+					calendario=manager.getCalendarios(JFramePrincipal.getUsuarioConectado(),(short) (comboDiasSemana.getSelectedIndex()+1), JFramePrincipal.getTipo());
+					
+					ArrayList<Serie> x = calendario[1].getSeries();
+					for (short i = 0; i < x.size(); i++) {
+						comboContenido.setSelectedItem(x.get(i).getNombre().toString());
 					}
 				}
 			});
@@ -112,12 +102,8 @@ public class JDialogNuevoCalendario extends JDialog {
 			botonAñadirNuevo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//Añade el contenido de la base de datos en calendario el dia indicado
-					try {
-						manager.nuevoRegistroCalendario(JFramePrincipal.getUsuarioConectado(), comboContenido.getSelectedItem().toString(), comboDiasSemana.getSelectedItem().toString(),JFramePrincipal.getTipo());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					manager.nuevoRegistroCalendario(JFramePrincipal.getUsuarioConectado(), comboContenido.getSelectedItem().toString(), comboDiasSemana.getSelectedItem().toString().toLowerCase(),JFramePrincipal.getTipo());
+
 					
 				}
 			});

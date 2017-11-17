@@ -5,6 +5,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import clases.Contenido;
+import clases.Serie;
 import datos.Manager;
 
 import javax.swing.JLabel;
@@ -12,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -22,10 +25,12 @@ public class JPanelListado extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 6097400309311389493L;
-	private JScrollPane scrollPaneFavoritosComunidad;
-	private JTable tablaFavoritosComunidad;
+	private JScrollPane scrollPaneListadoPersonal;
+	private JTable tablaListadoPersonal;
 	private DefaultTableModel dtm;
 	private Manager manager=new Manager();
+	private JComboBox<String> comboBoxTipos;
+	private ArrayList<Contenido> contenidosMostrados;
 
 	/**
 	 * Crea el panel que se encargará de listar el contenido del usuario y ofrecerle opciones sobre el 
@@ -52,6 +57,7 @@ public class JPanelListado extends JPanel {
 				//Añade a la tabla todos los datos de contenido del usuario en la base de datos 
 				//Del tipo seleccionado en la comb box
 				//Que correspondenn al usuario conectado
+				contenidosMostrados = new ArrayList<Contenido>();
 			}
 		});
 		botonBuscar.setBounds(334, 66, 89, 23);
@@ -72,16 +78,13 @@ public class JPanelListado extends JPanel {
 		btnBorrarSeleccionado.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Borra la entrada seleccionada en la tabla y en la base de datos
-				System.out.println(tablaFavoritosComunidad.getSelectedRow());
-				if(tablaFavoritosComunidad.getSelectedRowCount()!=0) {
-					dtm.removeRow(tablaFavoritosComunidad.getSelectedRow());
-					String nombreContenido=(String) dtm.getValueAt(tablaFavoritosComunidad.getSelectedRow(), 1);
-					try {
-						manager.borrarContenidoSeleccionado(JFramePrincipal.getUsuarioConectado(), nombreContenido, JFramePrincipal.getTipo());
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				System.out.println(tablaListadoPersonal.getSelectedRow());
+				if(tablaListadoPersonal.getSelectedRowCount()!=0) {
+					String nombreContenido=(String) dtm.getValueAt(tablaListadoPersonal.getSelectedRow(), 0);
+					dtm.removeRow(tablaListadoPersonal.getSelectedRow());
+					manager.borrarContenidoSeleccionado(JFramePrincipal.getUsuarioConectado(), nombreContenido.trim(),comboBoxTipos.getSelectedItem().toString(), JFramePrincipal.getTipo());
+					
+
 
 				}
 
@@ -97,13 +100,9 @@ public class JPanelListado extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				//Añade a la base de datos que que recomeinda el contenido de la linea seleccionada
-				String nombreContenido=(String) dtm.getValueAt(tablaFavoritosComunidad.getSelectedRow(),1);
-				try {
-					manager.recomendarContenidoSeleccionado(JFramePrincipal.getUsuarioConectado(), nombreContenido, JFramePrincipal.getTipo());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				String nombreContenido=(String) dtm.getValueAt(tablaListadoPersonal.getSelectedRow(),0);
+				manager.recomendarContenidoSeleccionado(JFramePrincipal.getUsuarioConectado(), nombreContenido,comboBoxTipos.getSelectedItem().toString(), JFramePrincipal.getTipo());
+
 
 			}
 		});
@@ -114,7 +113,19 @@ public class JPanelListado extends JPanel {
 		btnModificarSeleccio.addActionListener(new ActionListener() {
 			//Abre la ventana de nuevo lista con una acción de modificar
 			public void actionPerformed(ActionEvent arg0) {
-				//se abre la ventana nuevo lista con difentes opciones segun el tipo de contenido de la lista seleccionada
+				Contenido contenidoSeleccionado = null;
+				contenidoSeleccionado= new Serie();
+				contenidoSeleccionado.setNombre("House");
+				/*for(Contenido contenido:contenidosMostrados) {
+					if(contenido.getNombre().equals((String) dtm.getValueAt(tablaListadoPersonal.getSelectedRow(),0))) {
+						contenidoSeleccionado = contenido;
+						break;
+					}
+				}
+				*/
+				JDialogNuevoLista nContenido=new JDialogNuevoLista("Modificar",comboBoxTipos.getSelectedItem().toString(),contenidoSeleccionado);
+			
+				nContenido.setVisible(true);
 			}
 		});
 		btnModificarSeleccio.setBounds(532, 87, 168, 23);
@@ -142,20 +153,20 @@ public class JPanelListado extends JPanel {
 		setLayout(null);
 		
 		dtm = new DefaultTableModel(rowData,columnNames);
-		tablaFavoritosComunidad= new JTable(dtm);
-		scrollPaneFavoritosComunidad = new JScrollPane(tablaFavoritosComunidad);
+		tablaListadoPersonal= new JTable(dtm);
+		scrollPaneListadoPersonal = new JScrollPane(tablaListadoPersonal);
 		//scrollPaneFavoritosComunidad.setBorder(BorderFactory.createEmptyBorder());
-		scrollPaneFavoritosComunidad.setBounds(50, 120, 650,538 );
-		tablaFavoritosComunidad.setFillsViewportHeight(true);
-		add(scrollPaneFavoritosComunidad);
-		//tablaFavoritosComunidad.setEnabled(false);
-		//tablaFavoritosComunidad.setBackground(new Color(0,0,0,0));
-		//tablaFavoritosComunidad.setShowVerticalLines(false);
-		//tablaFavoritosComunidad.setShowGrid(false);
-		//tablaFavoritosComunidad.setRowHeight(20);
-		//tablaFavoritosComunidad.setTableHeader(null);
-		tablaFavoritosComunidad.setDefaultEditor(Object.class, null);	
-		tablaFavoritosComunidad.getTableHeader().setReorderingAllowed(false);
+		scrollPaneListadoPersonal.setBounds(50, 120, 650,538 );
+		tablaListadoPersonal.setFillsViewportHeight(true);
+		add(scrollPaneListadoPersonal);
+		//tablaListadoPersonal.setEnabled(false);
+		//tablaListadoPersonal.setBackground(new Color(0,0,0,0));
+		//tablaListadoPersonal.setShowVerticalLines(false);
+		//tablaListadoPersonal.setShowGrid(false);
+		//tablaListadoPersonal.setRowHeight(20);
+		//tablaListadoPersonal.setTableHeader(null);
+		tablaListadoPersonal.setDefaultEditor(Object.class, null);	
+		tablaListadoPersonal.getTableHeader().setReorderingAllowed(false);
 	}
 	
 	/**
@@ -174,7 +185,7 @@ public class JPanelListado extends JPanel {
 	 * Configura los combobox de la ventana
 	 */
 	private void comboBox() {
-		JComboBox<String> comboBoxTipos = new JComboBox<String>();
+		comboBoxTipos = new JComboBox<String>();
 		comboBoxTipos.setBounds(111, 67, 213, 20);
 		add(comboBoxTipos);
 		comboBoxTipos.addItem("Serie");

@@ -157,22 +157,19 @@ public class JPanelLogin extends JPanel {
 					JOptionPane.showMessageDialog(principal, "Seleccione una base de datos");
 				}else {
 					//SI ACCEDE A LA BASE DE DATOS
-					try {
-						if(manager.validarUsuario(usuarioLogin.getText(),passwordLogin.getText(),"login",JFramePrincipal.getTipo())) {
-							((JFramePrincipal) principal).getjPanelCalendario().setVisible(true);
-							((JFramePrincipal) principal).getjPanelListado().setVisible(false);
-							((JFramePrincipal) principal).getjPanelMenu().setVisible(true);
-							((JFramePrincipal) principal).getjPanelRecomendaciones().setVisible(false);
-							((JFramePrincipal) principal).getjPanelTopBar().setVisible(true);
-							((JFramePrincipal) principal).getjPanelLogin().setVisible(false);
-							
-						//SI NO ACCEDE
-						}else {
-							JOptionPane.showMessageDialog(principal, "Usuario o Contraseña incorrectos");
-						}
-					} catch (IOException e1) {
-						
+					if(manager.validarUsuario(usuarioLogin.getText(),passwordLogin.getText(),"login",JFramePrincipal.getTipo())) {
+						((JFramePrincipal) principal).getjPanelCalendario().setVisible(true);
+						((JFramePrincipal) principal).getjPanelListado().setVisible(false);
+						((JFramePrincipal) principal).getjPanelMenu().setVisible(true);
+						((JFramePrincipal) principal).getjPanelRecomendaciones().setVisible(false);
+						((JFramePrincipal) principal).getjPanelTopBar().setVisible(true);
+						((JFramePrincipal) principal).getjPanelLogin().setVisible(false);
+							JFramePrincipal.setUsuarioConectado(usuarioLogin.getText());
+					//SI NO ACCEDE
+					}else {
+						JOptionPane.showMessageDialog(principal, "Usuario o Contraseña incorrectos");
 					}
+
 				}
 			}
 		});
@@ -187,8 +184,13 @@ public class JPanelLogin extends JPanel {
 		botonRegistrarse.addActionListener(new ActionListener() {
 			//Ejecuta la ventana de registro
 			public void actionPerformed(ActionEvent e) {
-				JDialogRegistro nRegistro= new JDialogRegistro();
-				nRegistro.setVisible(true);
+				//Si no ha seleccionado base de datos
+				if(JFramePrincipal.getTipo()==0) {
+					JOptionPane.showMessageDialog(principal, "Seleccione una base de datos");
+				}else {
+					JDialogRegistro nRegistro= new JDialogRegistro();
+					nRegistro.setVisible(true);
+				}
 			}
 		});
 		botonRegistrarse.setBorder(null);
