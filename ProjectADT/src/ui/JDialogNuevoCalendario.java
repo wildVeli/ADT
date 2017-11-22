@@ -78,13 +78,14 @@ public class JDialogNuevoCalendario extends JDialog {
 			JButton btnVer = new JButton("Ver");
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Calendario[] calendario=new Calendario[1];
+					ArrayList<Calendario> calendario=new ArrayList<Calendario>();
 					calendario=manager.getCalendarios(JFramePrincipal.getUsuarioConectado(),(short) (comboDiasSemana.getSelectedIndex()+1), JFramePrincipal.getTipo());
 					
-					ArrayList<Serie> x = calendario[1].getSeries();
+				/*	ArrayList<Serie> x = calendario.get(index).getSeries();
 					for (short i = 0; i < x.size(); i++) {
 						comboContenido.setSelectedItem(x.get(i).getNombre().toString());
 					}
+					*/
 				}
 			});
 			btnVer.setBounds(259, 67, 89, 23);

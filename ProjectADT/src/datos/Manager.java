@@ -193,8 +193,8 @@ public class Manager {
 	 * @return devuelve los calendarios que tiene el usuario
 	 * @throws IOException 
 	 */
-	public Calendario[] getCalendarios (String nombreUsuario,short calendario,short tipo) {
-		Calendario [] calendarios=new Calendario[7];
+	public ArrayList<Calendario> getCalendarios (String nombreUsuario,short calendario,short tipo) {
+		ArrayList<Calendario> calendarios=new ArrayList<Calendario>();
 		switch(tipo){
 			case 1:
 				calendarios=dbManager.getCalendarios(nombreUsuario,calendario);

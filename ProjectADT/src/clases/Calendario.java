@@ -25,11 +25,16 @@ public class Calendario {
 	/**
 	 * Description of the property dia.
 	 */
+	
 	private String dia = "";
 
 	// Start of user code (user defined attributes for Calendario)
 
 	// End of user code
+
+	public void setSeries(ArrayList<Serie> series) {
+		this.series = series;
+	}
 
 	/**
 	 * The constructor.

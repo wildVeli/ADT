@@ -79,6 +79,7 @@ public class JPanelCalendario extends JPanel {
 		
 		/*
 		tablaLunes();
+		
 		tablaMartes();
 		tablaMiercoles();
 		tablaJueves();
@@ -89,13 +90,15 @@ public class JPanelCalendario extends JPanel {
 		
 		
 	}
+	/*
 	private void tablaLunes() {
 
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			Calendario[] x=new Calendario[1];
+		
+			ArrayList<Calendario> x=new ArrayList<Calendario> ();
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 1, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x[1].getSeries();
-			Object[][] rowData = {{"House"}};
+			ArrayList <Serie> series=x.get(1).getSeries();
+			Object[][] rowData = {{"House","juan"}};
 			String[] columnNames = {"Nombre"};
 			//FIN RECOGIDA
 				
@@ -130,7 +133,7 @@ public class JPanelCalendario extends JPanel {
 	private void tablaMartes() {
 		
 		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			Calendario[] x=new Calendario[1];
+			ArrayList<Calendario> x=new Calendario[1];
 			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 2, JFramePrincipal.getTipo());
 			ArrayList <Serie> series=x[1].getSeries();
 			String[] columnNames = {"Nombre"};
@@ -308,7 +311,7 @@ public class JPanelCalendario extends JPanel {
 	}
 
 
-
+*/
 	/**
 	 * Crea los labels que contendrán los nombres de los dias y los posiciona en el panel
 	 */

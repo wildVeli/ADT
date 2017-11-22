@@ -208,7 +208,7 @@ public class DBObjectsManager {
 	 * @param calendario calendario especifico que se desea 0 es todos, 1 es lunes,2 es martes....7 es domingo
 	 * @return devuelve los calendarios del usuario
 	 */
-	public Calendario[] getCalendarios(String nombreUsuario, short calendario) {
+	public ArrayList<Calendario> getCalendarios(String nombreUsuario, short calendario) {
 		// TODO Auto-generated method stub
 		return null;
 	}

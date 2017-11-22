@@ -1,0 +1,41 @@
+use contenidos
+
+--------modelo1
+db.series.insert({_id:'ser1',nombre:"House",genero:"Ficción",recomendado:1,puntuacion:8,temporadas:7})
+db.series.insert({_id:'ser2',nombre:"Dora",genero:"Infantil",recomendado:0,puntuacion:2,temporadas:3})
+
+db.musica.insert({_id:'mus1',nombre:"Chocolate",genero:"Metal",recomendado:1,puntuacion:7,tipo:"Cancion",cantante:"Baby Metal"})
+db.musica.insert({_id:'mus2',nombre:"Unity",genero:"Electro",recomendado:1,puntuacion:10,tipo:"Cancion",cantante:"FatRat"})
+
+db.libros.insert({_id:'libro1',nombre:"Francia",genero:"Guia",recomendado:0,puntuacion:4,autor:""})
+db.libros.insert({_id:'libro2',nombre:"Caperucita Roja",genero:"Infantil",recomendado:0,puntuacion:2,autor:""})
+
+db.peliculas.insert({_id:'peli1',nombre:"Rey Arturo",genero:"Historia",recomendado:1,puntuacion:5,director:""})
+db.peliculas.insert({_id:'peli2',nombre:"Roma",genero:"Documental",recomendado:1,puntuacion:5,director:""})
+
+db.usuarios.insert({_id:"juan",password:"1234",amigos:["Pedro","Isma"],series:['ser1','ser2'],musica:['mus1','mus2'],libros:['libro1','libro2'],peliculas:['peli1','peli2']})
+
+db.calendarios.insert({propietario:"juan",dia:"lunes",series:['ser1']})
+db.calendarios.insert({propietario:"juan",dia:"martes",series:['ser2']})
+db.calendarios.insert({propietario:"juan",dia:"miércoles",series:['ser1']})
+
+----------modelo2
+
+db.series.insert({propietario:"sara",nombre:"House",genero:"Ficción",recomendado:0,puntuacion:8,temporadas:7})
+db.series.insert({propietario:"sara",nombre:"Dora",genero:"Infantil",recomendado:0,puntuacion:2,temporadas:3})
+
+db.musica.insert({propietario:"juan",nombre:"Chocolate",genero:"Metal",recomendado:1,puntuacion:7,tipo:"Cancion",cantante:"Baby Metal"})
+db.musica.insert({propietario:"juan",nombre:"Unity",genero:"Electro",recomendado:1,puntuacion:10,tipo:"Cancion",cantante:"FatRat"})
+
+db.libros.insert({propietario:"juan",nombre:"Francia",genero:"Guia",recomendado:0,puntuacion:4,autor:""})
+db.libros.insert({propietario:"juan",nombre:"Caperucita Roja",genero:"Infantil",recomendado:0,puntuacion:2,autor:""})
+
+db.peliculas.insert({propietario:"juan",nombre:"Rey Arturo",genero:"Historia",recomendado:1,puntuacion:5,director:""})
+db.peliculas.insert({propietario:"juan",nombre:"Roma",genero:"Documental",recomendado:1,puntuacion:5,director:""})
+
+db.usuarios.insert({propietario:"juan",password:"1234",amigos:{"Pedro","Isma"}})
+
+db.calendarios.insert({propietario:"juan",dia:"lunes",series:{"hola","adios"}})
+db.calendarios.insert({propietario:"juan",dia:"martes",series:['ser2']})
+db.calendarios.insert({propietario:"juan",dia:"miércoles",series:['ser1']})
+

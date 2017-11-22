@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -31,6 +32,7 @@ public class JPanelListado extends JPanel {
 	private Manager manager=new Manager();
 	private JComboBox<String> comboBoxTipos;
 	private ArrayList<Contenido> contenidosMostrados;
+	private String tipoSeleccionado;
 
 	/**
 	 * Crea el panel que se encargará de listar el contenido del usuario y ofrecerle opciones sobre el 
@@ -57,7 +59,10 @@ public class JPanelListado extends JPanel {
 				//Añade a la tabla todos los datos de contenido del usuario en la base de datos 
 				//Del tipo seleccionado en la comb box
 				//Que correspondenn al usuario conectado
+				tipoSeleccionado = comboBoxTipos.getSelectedItem().toString();
 				contenidosMostrados = new ArrayList<Contenido>();
+				contenidosMostrados = manager.getContenidoDeUnTipo(JFramePrincipal.getUsuarioConectado(),comboBoxTipos.getSelectedItem().toString(),JFramePrincipal.getTipo());
+				tablaContenido();
 			}
 		});
 		botonBuscar.setBounds(334, 66, 89, 23);
@@ -140,16 +145,41 @@ public class JPanelListado extends JPanel {
 		
 	}
 
+	private String comprobarTipo(String tipoContenido) {
+		String collec= null;
+		switch (tipoContenido) {
+		
+		case "Serie":
+			collec="series";
+			break;
+		case "Película":
+			collec="peliculas";
+			break;
+		case "Música":
+			collec="musica";
+			break;
+		case "Libro":
+			collec="libros";
+			break;
+		}
+		return collec;
+	}
 	/**
 	 * Tabla que contendrá el contenido del usuario una vez se busque
 	 */
 	private void tablaContenido() {
+		ArrayList <String>data=new ArrayList <String>();
+		for(Contenido contenido:contenidosMostrados) {
+			String srt[] = {contenido.getNombre(),contenido.getGenero(),String.valueOf(contenido.getRecomendado()),String.valueOf(contenido.getPuntucacion())};
+			
+		}
+		
 		//Inicia vacia la tabla
 		Object[][] rowData = {
-				{"LazyTown","Infantil","Sí","2","3"},
+				{},
 				{"House","Fantasia","Sí","9","5"}
 			};
-			String[] columnNames = {"Nombre","Género","Recomendado","Puntuacion","Temporadas"};
+			String[] columnNames = {"Nombre","Género","Recomendado","Puntuacion"};
 		setLayout(null);
 		
 		dtm = new DefaultTableModel(rowData,columnNames);
