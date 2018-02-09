@@ -33,7 +33,7 @@ public class DBObjectsManager {
 		if(dbHost == null || dbName == null || dbUserName == null || dbPassword == null){
 			FileInputStream input = null;
 			try{
-				input = new FileInputStream("./db.properties");
+				input = new FileInputStream("./documents/db.properties");
 				Properties config = new Properties();
 				config.load(input);
 				dbHost = config.getProperty("ip");
@@ -159,7 +159,7 @@ public class DBObjectsManager {
 	 * @param tipoContenido tipo de contenido que se busca
 	 * @return devuelve los contenidos de un usuario del tipo especificado
 	 */
-	public ArrayList<Contenido> getContenidoDeUnTipo(String nombreUsuario, String tipoContenido) {
+	public ArrayList<Object> getContenidoDeUnTipo(String nombreUsuario, String tipoContenido) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -205,10 +205,9 @@ public class DBObjectsManager {
 	/**
 	 *Método que recogerá los calendarios de un usuario concreto
 	 * @param nombreUsuario usuario del cual se buscarán los calendarios
-	 * @param calendario calendario especifico que se desea 0 es todos, 1 es lunes,2 es martes....7 es domingo
 	 * @return devuelve los calendarios del usuario
 	 */
-	public ArrayList<Calendario> getCalendarios(String nombreUsuario, short calendario) {
+	public ArrayList<Calendario> getCalendarios(String nombreUsuario) {
 		// TODO Auto-generated method stub
 		return null;
 	}

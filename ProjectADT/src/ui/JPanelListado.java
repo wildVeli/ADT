@@ -4,8 +4,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import clases.Contenido;
+import clases.Libro;
+import clases.Musica;
+import clases.Pelicula;
 import clases.Serie;
 import datos.Manager;
 
@@ -16,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -31,7 +36,7 @@ public class JPanelListado extends JPanel {
 	private DefaultTableModel dtm;
 	private Manager manager=new Manager();
 	private JComboBox<String> comboBoxTipos;
-	private ArrayList<Contenido> contenidosMostrados;
+	private ArrayList<Object> contenidosMostrados;
 	private String tipoSeleccionado;
 
 	/**
@@ -40,10 +45,11 @@ public class JPanelListado extends JPanel {
 	public JPanelListado() {
 		setBounds(269, 39, 755, 729);
 		
-		tablaContenido();
+		
 		labels();
 		comboBox();
 		botones();
+		tablaContenido();
 	
 	}
 
@@ -60,9 +66,10 @@ public class JPanelListado extends JPanel {
 				//Del tipo seleccionado en la comb box
 				//Que correspondenn al usuario conectado
 				tipoSeleccionado = comboBoxTipos.getSelectedItem().toString();
-				contenidosMostrados = new ArrayList<Contenido>();
+				contenidosMostrados = new ArrayList<Object>();
 				contenidosMostrados = manager.getContenidoDeUnTipo(JFramePrincipal.getUsuarioConectado(),comboBoxTipos.getSelectedItem().toString(),JFramePrincipal.getTipo());
-				tablaContenido();
+				nuevosDatosContenido();
+				
 			}
 		});
 		botonBuscar.setBounds(334, 66, 89, 23);
@@ -85,8 +92,8 @@ public class JPanelListado extends JPanel {
 				//Borra la entrada seleccionada en la tabla y en la base de datos
 				System.out.println(tablaListadoPersonal.getSelectedRow());
 				if(tablaListadoPersonal.getSelectedRowCount()!=0) {
-					String nombreContenido=(String) dtm.getValueAt(tablaListadoPersonal.getSelectedRow(), 0);
-					dtm.removeRow(tablaListadoPersonal.getSelectedRow());
+					String nombreContenido=(String) tablaListadoPersonal.getModel().getValueAt(tablaListadoPersonal.getSelectedRow(), 0);
+					((DefaultTableModel)tablaListadoPersonal.getModel()).removeRow(tablaListadoPersonal.getSelectedRow());
 					manager.borrarContenidoSeleccionado(JFramePrincipal.getUsuarioConectado(), nombreContenido.trim(),comboBoxTipos.getSelectedItem().toString(), JFramePrincipal.getTipo());
 					
 
@@ -105,7 +112,7 @@ public class JPanelListado extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				//Añade a la base de datos que que recomeinda el contenido de la linea seleccionada
-				String nombreContenido=(String) dtm.getValueAt(tablaListadoPersonal.getSelectedRow(),0);
+				String nombreContenido=(String) tablaListadoPersonal.getModel().getValueAt(tablaListadoPersonal.getSelectedRow(),0);
 				manager.recomendarContenidoSeleccionado(JFramePrincipal.getUsuarioConectado(), nombreContenido,comboBoxTipos.getSelectedItem().toString(), JFramePrincipal.getTipo());
 
 
@@ -119,15 +126,14 @@ public class JPanelListado extends JPanel {
 			//Abre la ventana de nuevo lista con una acción de modificar
 			public void actionPerformed(ActionEvent arg0) {
 				Contenido contenidoSeleccionado = null;
-				contenidoSeleccionado= new Serie();
-				contenidoSeleccionado.setNombre("House");
-				/*for(Contenido contenido:contenidosMostrados) {
-					if(contenido.getNombre().equals((String) dtm.getValueAt(tablaListadoPersonal.getSelectedRow(),0))) {
-						contenidoSeleccionado = contenido;
+
+				for(Object contenido:contenidosMostrados) {
+					if(((Contenido)contenido).getNombre().equals((String) tablaListadoPersonal.getModel().getValueAt(tablaListadoPersonal.getSelectedRow(),0))) {
+						contenidoSeleccionado = (Contenido)contenido;
 						break;
 					}
 				}
-				*/
+				
 				JDialogNuevoLista nContenido=new JDialogNuevoLista("Modificar",comboBoxTipos.getSelectedItem().toString(),contenidoSeleccionado);
 			
 				nContenido.setVisible(true);
@@ -145,45 +151,87 @@ public class JPanelListado extends JPanel {
 		
 	}
 
-	private String comprobarTipo(String tipoContenido) {
-		String collec= null;
-		switch (tipoContenido) {
+	
+	private void nuevosDatosContenido() {
+		DefaultTableModel tableModel = new DefaultTableModel();
+		tableModel.addColumn("Nombre");
+		tableModel.addColumn("Género");
+		tableModel.addColumn("Recomendado");
+		tableModel.addColumn("Puntuación");
 		
+		
+		String tipo= comboBoxTipos.getSelectedItem().toString();
+		switch (tipo) {
+			
 		case "Serie":
-			collec="series";
+			tableModel.addColumn("Temporadas");
 			break;
 		case "Película":
-			collec="peliculas";
+			tableModel.addColumn("Director");
 			break;
 		case "Música":
-			collec="musica";
+			tableModel.addColumn("Tipo");
+			tableModel.addColumn("Cantante");
 			break;
 		case "Libro":
-			collec="libros";
+			tableModel.addColumn("Autor");
 			break;
 		}
-		return collec;
+		
+		
+		Vector<String> row = new Vector<String>();
+		
+		ArrayList <String>data=new ArrayList <String>();
+		for(Object contenido:contenidosMostrados) {
+			System.out.println("size contenidos "+contenidosMostrados.size());
+			row.add(((Contenido)contenido).getNombre());
+			row.add(((Contenido)contenido).getGenero());
+			row.add(String.valueOf(((Contenido)contenido).getRecomendado()));
+			row.add(String.valueOf(((Contenido)contenido).getPuntucacion()));
+			
+			switch (tipo) {
+			
+			case "Serie":
+				row.add(String.valueOf(((Serie)contenido).getTemporadas()));
+				break;
+			case "Película":
+				row.add(((Pelicula)contenido).getDirector());
+				break;
+			case "Música":
+				row.add(((Musica)contenido).getTipo());
+				row.add(((Musica)contenido).getCantante());
+				break;
+			case "Libro":
+				row.add(((Libro)contenido).getAutor());
+				break;
+			}
+			
+			System.out.println("row size "+row.size());
+			tableModel.addRow(row);
+			row = new Vector <String>();
+			System.out.println("row size fin"+row.size());
+		}
+		tablaListadoPersonal.setModel(tableModel);
+		
 	}
 	/**
 	 * Tabla que contendrá el contenido del usuario una vez se busque
 	 */
 	private void tablaContenido() {
-		ArrayList <String>data=new ArrayList <String>();
-		for(Contenido contenido:contenidosMostrados) {
-			String srt[] = {contenido.getNombre(),contenido.getGenero(),String.valueOf(contenido.getRecomendado()),String.valueOf(contenido.getPuntucacion())};
-			
-		}
-		
+
+
 		//Inicia vacia la tabla
 		Object[][] rowData = {
 				{},
-				{"House","Fantasia","Sí","9","5"}
+				{}
 			};
-			String[] columnNames = {"Nombre","Género","Recomendado","Puntuacion"};
+			String[] columnNames = {};
 		setLayout(null);
 		
 		dtm = new DefaultTableModel(rowData,columnNames);
+		
 		tablaListadoPersonal= new JTable(dtm);
+		
 		scrollPaneListadoPersonal = new JScrollPane(tablaListadoPersonal);
 		//scrollPaneFavoritosComunidad.setBorder(BorderFactory.createEmptyBorder());
 		scrollPaneListadoPersonal.setBounds(50, 120, 650,538 );

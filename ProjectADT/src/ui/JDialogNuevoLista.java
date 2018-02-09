@@ -40,7 +40,7 @@ public class JDialogNuevoLista extends JDialog {
 	private JTextField tFcantante;
 	private JComboBox<String> comboBoxTipoMusica;
 	private Manager manager=new Manager();
-	private JCheckBox cBfavoritos;
+	private JCheckBox cbRecomendado;
 	private String tipoContenidoAModificar;
 	private Contenido contenidoAModificar;
 	
@@ -81,7 +81,7 @@ public class JDialogNuevoLista extends JDialog {
 		this.tipoContenidoAModificar=tipoContenidoAModificar;
 		this.contenidoAModificar=contenidoAModificar;
 		
-
+		checkbox();
 		getContentPane().setBackground(Color.LIGHT_GRAY);
 		setModal(true);
 
@@ -95,7 +95,7 @@ public class JDialogNuevoLista extends JDialog {
 		textFieds();
 		comboBox();
 		botones(accion);
-		checkbox();
+		
 		labels();	
 	}
 
@@ -207,16 +207,66 @@ public class JDialogNuevoLista extends JDialog {
 		btnElegir.setBounds(411, 61, 89, 23);
 		getContentPane().add(btnElegir);
 		
+		botonAnadirNuevo = new JButton("Añadir");
+		botonAnadirNuevo.addActionListener(new ActionListener() {
+			//Añade los datos a la base de datos o da error si no se cumple lo minimo
+			public void actionPerformed(ActionEvent e) {
+				if(accion.equals("Modificar")) {
+					Contenido contenido=cargarContenido();
+					manager.modificarContenido(JFramePrincipal.getUsuarioConectado(),contenido , tipoContenidoAModificar, JFramePrincipal.getTipo());
+					dispose();
+				}else {
+					//Si no ha seleccionado tipo genera un error avisando al usuario
+					if(comboBoxTipos.getSelectedIndex()==-1 || tFnombre.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Seleccione un tipo y rellene los campos obligatorios para añadir","Error",JOptionPane.ERROR_MESSAGE);
+					}else {
+						Contenido contenido=cargarContenido();
+						manager.anadirNuevoContenido(JFramePrincipal.getUsuarioConectado(), contenido, comboBoxTipos.getSelectedItem().toString(), JFramePrincipal.getTipo());
+						dispose();
+						//Añade lo efectuado a la base de datos
+					}
+				}
+				
 
+				
+			}
+			/**
+			 * Carga los datos del tipo de contenido que ha elegido el usuario
+			 * @return devuelve el contenido que ha seleccionado el usuario cargado
+			 */
+			private Contenido cargarContenido() {
+				Contenido contenido;
+				String x = comboBoxTipos.getSelectedItem().toString();
+				//Carga los datos en contenido segun los distintos tipos que se hayan podido elegir
+				if(x.equals("Serie")) {
+					contenido=(Serie)new Serie(Integer.valueOf(tFtemporadas.getText()));
+				}else if(x.equals("Película")) {
+					contenido=new Pelicula(tFdirector.getText());
+				}else if(x.equals("Música")) {
+					contenido=new Musica(tFcantante.getText(),comboBoxTipoMusica.getSelectedItem().toString());
+				}else {
+					contenido=new Libro(tFautor.getText());
+				}
+				contenido.setNombre(tFnombre.getText());
+				contenido.setGenero(tFgenero.getText());
+				contenido.setPuntucacion(Short.valueOf(tFpuntuacion.getText()));
+				contenido.setRecomendado(cbRecomendado.isSelected());
+				return contenido;
+			}
+		});
 		
 		//Tipo de contenido para añadir ,establece distintos campos habilitados según la opción
 		if(accion.equals("Modificar")) {
 			
+			botonAnadirNuevo.setText("Modificar");
 			comboBoxTipos.setEditable(false);
 			comboBoxTipos.setSelectedItem(tipoContenidoAModificar);
 			tFnombre.setText(contenidoAModificar.getNombre());
 			tFgenero.setText(contenidoAModificar.getGenero());
 			tFpuntuacion.setText(String.valueOf(contenidoAModificar.getPuntucacion()));
+			if(contenidoAModificar.getRecomendado()) {
+				cbRecomendado.setSelected(true);
+			}
 			switch (tipoContenidoAModificar) {
 			case "Serie":
 				Serie serieAModificar= (Serie)contenidoAModificar;
@@ -243,51 +293,7 @@ public class JDialogNuevoLista extends JDialog {
 			
 
 		}
-		botonAnadirNuevo = new JButton("");
-		botonAnadirNuevo.setText("Modificar");
-		botonAnadirNuevo.addActionListener(new ActionListener() {
-			//Añade los datos a la base de datos o da error si no se cumple lo minimo
-			public void actionPerformed(ActionEvent e) {
-				if(accion.equals("Modificar")) {
-					Contenido contenido=cargarContenido();
-					manager.modificarContenido(JFramePrincipal.getUsuarioConectado(),contenido , tipoContenidoAModificar, JFramePrincipal.getTipo());
-				}else {
-					if(comboBoxTipos.getSelectedIndex()==-1 || tFnombre.getText().isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Seleccione un tipo y rellene los campos obligatorios para añadir","Error",JOptionPane.ERROR_MESSAGE);
-					}else {
-						Contenido contenido=cargarContenido();
-						manager.anadirNuevoContenido(JFramePrincipal.getUsuarioConectado(), contenido, comboBoxTipos.getSelectedItem().toString(), JFramePrincipal.getTipo());
 
-						//Añade lo efectuado a la base de datos
-					}
-				}
-
-				
-			}
-			/**
-			 * Carga los datos del tipo de contenido que ha elegido el usuario
-			 * @return devuelve el contenido que ha seleccionado el usuario cargado
-			 */
-			private Contenido cargarContenido() {
-				Contenido contenido;
-				String x = comboBoxTipos.getSelectedItem().toString();
-				//Carga los datos en contenido segun los distintos tipos que se hayan podido elegir
-				if(x.equals("Serie")) {
-					contenido=(Serie)new Serie(Integer.valueOf(tFtemporadas.getText()));
-				}else if(x.equals("Película")) {
-					contenido=new Pelicula(tFdirector.getText());
-				}else if(x.equals("Música")) {
-					contenido=new Musica(tFcantante.getText(),comboBoxTipoMusica.getSelectedItem().toString());
-				}else {
-					contenido=new Libro(tFautor.getText());
-				}
-				contenido.setNombre(tFnombre.getText());
-				contenido.setGenero(tFgenero.getText());
-				contenido.setPuntucacion(Short.valueOf(tFpuntuacion.getText()));
-				contenido.setRecomendado(cBfavoritos.isSelected());
-				return contenido;
-			}
-		});
 		botonAnadirNuevo.setFocusPainted(false);
 		botonAnadirNuevo.setRolloverEnabled(false);
 		botonAnadirNuevo.setContentAreaFilled(false);	
@@ -317,9 +323,9 @@ public class JDialogNuevoLista extends JDialog {
 	 * Creación y configuraciones de los checkbox de la ventana
 	 */
 	private void checkbox() {
-		cBfavoritos = new JCheckBox("");
-		cBfavoritos.setBounds(164, 224, 21, 23);
-		getContentPane().add(cBfavoritos);
+		cbRecomendado = new JCheckBox("");
+		cbRecomendado.setBounds(164, 224, 21, 23);
+		getContentPane().add(cbRecomendado);
 		
 		
 	}

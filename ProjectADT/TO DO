@@ -2,45 +2,49 @@
 Principal
 	-Reestructurar
 
-
 Menú
 	-Mirar cambio a jbuttons, se fastidia la sombra
 	-LOS OTROS DOS SON JLBELS
 	-Usuario conectado
-	-Amigos
 	
-PersonalMouseListener
-	-Reestructurar
-
-
-
-Terminado(en espera de modificar para BDA)
-
+	
+Terminado(en espera de modificar para BDA)-----------------------------------------------------------
 
 
 -JDialogNuevaLista
-	-Añadir/borrar registros en base de datos
-	
-Recomendaciones
-	-Datos de la base de datos
-	-Imagenes o botones para las opciones de añadir y borrar
-	-Decidir diseño final de la tabla
+	-Añadir/borrar registros en base de datos 
 	
 Listado
 	-Botones de Modificar y Recomendar a amigo, base de datos
 
 
-Terminado(en espera de BDA)
+Terminado(en espera de BDA)---------------------------------------------------------------------------
 
-	
+-PersonalMouseListener
 -JPanelCalendario
 	-Cambiar registros en tablas cuando se añadan de la base de datos en nuevoCalendario
 -JDialogNuevoCalendario
-	-Boton Ver 
 -TopBar
 -JPanelLogin
 -JDialogRegistro
 
+Pactado
+-Amigos(no hacer)
+-Recomendaciones(no hacer)
+	-Datos de la base de datos
+	-Imagenes o botones para las opciones de añadir y borrar
+	-Decidir diseño final de la tabla
 
 
 SEGUIR CON INSERTAR CONTENIDO EN OBJECT MANAGER Y CREAR FUNCION DE INSERTAR CONTENIDO DE DB
+
+
+//---------------------------
+arreglos 5-12-17
+
+arreglado la visualización de calendario desde login, arreglado la logica de mongo en getCalendarios
+se debe pasar los datos de series que se recogen en un string a las distintas series.setnombre para añaadirlas a los calendarios y luego al devolverlas poderlas a añadirlas a los distintos calendarios de la interfaz
+
+
+----------------------------
+Base de datos mongo terminada excepto amigos y recomendaciones

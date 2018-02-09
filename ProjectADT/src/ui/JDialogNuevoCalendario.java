@@ -5,6 +5,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import clases.Calendario;
 import clases.Serie;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 
@@ -26,7 +28,7 @@ public class JDialogNuevoCalendario extends JDialog {
 	 */
 	private static final long serialVersionUID = 5038539237899941790L;
 	private JButton botonCancelar;
-	private JButton botonAñadirNuevo;
+	private JButton botonAnadirNuevo;
 	private JButton botonBorrar;
 	private JLabel lblTitulo;
 	private Manager manager=new Manager();
@@ -36,8 +38,8 @@ public class JDialogNuevoCalendario extends JDialog {
 
 
 	/**
-	 * Crea el diálogo que servirá para introducir o borrar una entrada en el calendario (se accede desde el Panel de calendario)
-	 * @param accion con la que se efectuara y configurará esta ventana (Borrar o Añadir)
+	 * Crea el diï¿½logo que servirï¿½ para introducir o borrar una entrada en el calendario (se accede desde el Panel de calendario)
+	 * @param accion con la que se efectuara y configurarï¿½ esta ventana (Borrar o Aï¿½adir)
 	 */
 	public JDialogNuevoCalendario(String accion) {
 		
@@ -55,7 +57,7 @@ public class JDialogNuevoCalendario extends JDialog {
 		comboBox();
 		botones();
 
-		//Distintas configuraciones dependiendo del paramentro acción recibido
+		//Distintas configuraciones dependiendo del paramentro acciï¿½n recibido
 		if(accion.equals("borrar")) {
 
 			lblTitulo.setText("Borrar");
@@ -64,12 +66,14 @@ public class JDialogNuevoCalendario extends JDialog {
 			botonBorrar.setRolloverEnabled(false);
 			botonBorrar.setContentAreaFilled(false);	
 			botonBorrar.setBounds(73, 148, 89, 23);
+			botonBorrar.setEnabled(false);
 			getContentPane().add(botonBorrar);
 			botonBorrar.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					manager.borrarRegistroCalendario(JFramePrincipal.getUsuarioConectado(), comboContenido.getSelectedItem().toString(), comboDiasSemana.getSelectedItem().toString().toLowerCase(), JFramePrincipal.getTipo());
+					dispose();
 
 				}
 			});
@@ -78,14 +82,34 @@ public class JDialogNuevoCalendario extends JDialog {
 			JButton btnVer = new JButton("Ver");
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ArrayList<Calendario> calendario=new ArrayList<Calendario>();
-					calendario=manager.getCalendarios(JFramePrincipal.getUsuarioConectado(),(short) (comboDiasSemana.getSelectedIndex()+1), JFramePrincipal.getTipo());
+					comboContenido.removeAllItems();
+					ArrayList<Calendario> calendarios=new ArrayList<Calendario>();
+					calendarios=manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), JFramePrincipal.getTipo());
 					
-				/*	ArrayList<Serie> x = calendario.get(index).getSeries();
-					for (short i = 0; i < x.size(); i++) {
-						comboContenido.setSelectedItem(x.get(i).getNombre().toString());
+					comboDiasSemana.getSelectedIndex();
+					System.out.println("interfaz"+calendarios.size());
+
+					for (Calendario calendario : calendarios) {
+
+						System.out.println("dentro "+calendario.getDia());
+						System.out.println("tamanio series: "+calendario.getSeries().size());
+						System.out.println("dï¿½a semana "+ comboDiasSemana.getSelectedItem().toString());
+						if(calendario.getDia().equals(comboDiasSemana.getSelectedItem().toString().toLowerCase())) {
+							for(Serie serie :calendario.getSeries()) {
+								comboContenido.addItem(serie.getNombre());
+							}
+							comboContenido.validate();
+							comboContenido.repaint();
+							break;
+						}
 					}
-					*/
+					
+					if (comboContenido.getItemCount()>0) {
+						botonBorrar.setEnabled(true);
+					}else {
+						botonBorrar.setEnabled(false);
+					}
+					
 				}
 			});
 			btnVer.setBounds(259, 67, 89, 23);
@@ -93,23 +117,34 @@ public class JDialogNuevoCalendario extends JDialog {
 
 
 		}else {
-			lblTitulo.setText("Añadir");
-			botonAñadirNuevo = new JButton("A\u00F1adir");
-			botonAñadirNuevo.setFocusPainted(false);
-			botonAñadirNuevo.setRolloverEnabled(false);
-			botonAñadirNuevo.setContentAreaFilled(false);	
-			botonAñadirNuevo.setBounds(73, 148, 89, 23);
-			getContentPane().add(botonAñadirNuevo);
-			botonAñadirNuevo.addActionListener(new ActionListener() {
+			lblTitulo.setText("Aï¿½adir");
+			botonAnadirNuevo = new JButton("A\u00F1adir");
+			botonAnadirNuevo.setFocusPainted(false);
+			botonAnadirNuevo.setRolloverEnabled(false);
+			botonAnadirNuevo.setContentAreaFilled(false);	
+			botonAnadirNuevo.setBounds(73, 148, 89, 23);
+			getContentPane().add(botonAnadirNuevo);
+			botonAnadirNuevo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//Añade el contenido de la base de datos en calendario el dia indicado
+					//Aï¿½ade el contenido de la base de datos en calendario el dia indicado
 					manager.nuevoRegistroCalendario(JFramePrincipal.getUsuarioConectado(), comboContenido.getSelectedItem().toString(), comboDiasSemana.getSelectedItem().toString().toLowerCase(),JFramePrincipal.getTipo());
-
+					dispose();
 					
 				}
 			});
 
-			//Cargar contenido de la base de datos en el comboBox
+			
+			
+			
+			//Cargar las series de la base de datos en el comboBox
+			ArrayList<Object> series = new ArrayList<>();
+			series = manager.getContenidoDeUnTipo(JFramePrincipal.getUsuarioConectado(),"Serie", JFramePrincipal.getTipo());
+			for(Object serie: series) {
+				
+				comboContenido.addItem(((Serie)serie).getNombre());
+			}
+			comboContenido.setSelectedItem(1);
+			
 		}
 	
 
@@ -117,7 +152,7 @@ public class JDialogNuevoCalendario extends JDialog {
 	
 
 	/**
-	 * Creación y configuración de los labels de la ventana
+	 * Creaciï¿½n y configuraciï¿½n de los labels de la ventana
 	 */
 	private void labels() {
 		JLabel lblContenido = new JLabel("Contenido");
@@ -136,7 +171,7 @@ public class JDialogNuevoCalendario extends JDialog {
 	} 
 	
 	/**
-	 * Creación y configuración de los combo box 
+	 * Creaciï¿½n y configuraciï¿½n de los combo box 
 	 */
 	private void comboBox() {
 		comboContenido = new JComboBox<String>();
@@ -148,15 +183,15 @@ public class JDialogNuevoCalendario extends JDialog {
 		getContentPane().add(comboDiasSemana);
 		comboDiasSemana.addItem("Lunes");
 		comboDiasSemana.addItem("Martes");
-		comboDiasSemana.addItem("Miercoles");
+		comboDiasSemana.addItem("Miï¿½rcoles");
 		comboDiasSemana.addItem("Jueves");
 		comboDiasSemana.addItem("Viernes");
-		comboDiasSemana.addItem("Sabado");
+		comboDiasSemana.addItem("Sï¿½bado");
 		comboDiasSemana.addItem("Domingo");
 	}
 	
 	/**
-	 * Creación y configuración de botones(incluyendo sus listener)
+	 * Creaciï¿½n y configuraciï¿½n de botones(incluyendo sus listener)
 	 */
 	private void botones() {
 		botonCancelar = new JButton("Cancelar");

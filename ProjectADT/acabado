@@ -1,0 +1,33 @@
+base mongo funcionando
+
+-----BASE MYSQL
+-conexi�n
+-desconexi�n
+-validarUsuario
+-registrarUsuario
+-insertarContenido
+	-Serie
+	-Pelicula
+	-Musica
+	-Libros
+-getContenidoDeUnTipo
+	-Serie
+	-Pelicula
+	-Musica
+	-Libros
+-recomendarContenidoSeleccionado
+	-Serie
+	-Pelicula
+	-Musica
+	-Libros
+-borrarContenidoSeleccionado
+	-Serie
+	-Pelicula
+	-Musica
+	-Libros
+-nuevoRegistroCalendario
+-borrarRegistroCalendario
+-nuevoRegistroCalendario
+	-probar con más de 1
+-modificarContenido
+-getCalendarios

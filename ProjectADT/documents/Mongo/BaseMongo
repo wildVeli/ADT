@@ -1,0 +1,42 @@
+use contenidos
+
+
+db.series.insert({propietario:"sara",nombre:"House",genero:"Ficción",recomendado:true,puntuacion:"8",temporadas:"7"})
+db.series.insert({propietario:"juan",nombre:"House",genero:"Ficción",recomendado:true,puntuacion:"8",temporadas:"7"})
+db.series.insert({propietario:"juan",nombre:"Dora",genero:"Infantil",recomendado:false,puntuacion:"2",temporadas:"3"})
+
+
+db.series.insert({_id:"ser1",propietario:"juan",nombre:"Dora",genero:"Infantil",recomendado:false,puntuacion:"2",temporadas:"3"})
+
+db.musica.insert({propietario:"juan",nombre:"Chocolate",genero:"Metal",recomendado:true,puntuacion:"7",tipo:"Cancion",cantante:"Baby Metal"})
+db.musica.insert({propietario:"juan",nombre:"Unity",genero:"Electro",recomendado:true,puntuacion:"10",tipo:"Cancion",cantante:"FatRat"})
+
+db.libros.insert({propietario:"juan",nombre:"Francia",genero:"Guia",recomendado:false,puntuacion:"4",autor:""})
+db.libros.insert({propietario:"juan",nombre:"Caperucita Roja",genero:"Infantil",recomendado:false,puntuacion:"2",autor:""})
+
+db.peliculas.insert({propietario:"juan",nombre:"Rey Arturo",genero:"Historia",recomendado:true,puntuacion:"5",director:""})
+db.peliculas.insert({propietario:"juan",nombre:"Roma",genero:"Documental",recomendado:true,puntuacion:"5",director:""})
+
+db.usuarios.insert({_id:"juan",password:"1234",amigos:["Pedro","Isma"]})
+db.usuarios.insert({_id:"juan2",password:"juan",amigos:["Pedro","Isma"]})
+
+db.calendarios.insert({propietario:"juan",dia:"lunes",series:[]})
+db.calendarios.insert({propietario:"juan",dia:"martes",series:["House","Dora"]})
+db.calendarios.insert({propietario:"juan",dia:"miércoles",series:["Dora"]})
+db.calendarios.insert({propietario:"juan",dia:"jueves",series:[]})
+db.calendarios.insert({propietario:"juan",dia:"viernes",series:[]})
+db.calendarios.insert({propietario:"juan",dia:"sábado",series:[]})
+db.calendarios.insert({propietario:"juan",dia:"domingo",series:[]})
+
+
+
+//private Color colorTablasFondo =new Color(219, 219, 219);
+
+		/*
+		jPanelCalendario=new JPanelCalendario();
+		jPanelCalendario.setBounds(269, 39, 755, 729);
+		fondo.add(jPanelCalendario);
+		*/
+		
+		
+	

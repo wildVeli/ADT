@@ -32,6 +32,7 @@ public class PersonalMouseListener implements MouseListener{
 			
 		}else if(seleccion.equals(principal.getjPanelMenu().getBotonCalendario())) {
 			principal.getjPanelListado().setVisible(false);
+			((JFramePrincipal) principal).getjPanelCalendario().cargarDatosEnModelo();
 			principal.getjPanelCalendario().setVisible(true);
 			principal.getjPanelRecomendaciones().setVisible(false);
 		}else if(seleccion.equals(principal.getjPanelMenu().getBotonRecomendaciones())) {
