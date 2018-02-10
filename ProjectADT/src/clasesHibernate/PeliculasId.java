@@ -8,7 +8,7 @@ public class PeliculasId implements java.io.Serializable {
 
 	private String propietario;
 	private String nombre;
-	private String director;
+
 
 	public PeliculasId() {
 	}
@@ -16,7 +16,6 @@ public class PeliculasId implements java.io.Serializable {
 	public PeliculasId(String propietario, String nombre, String director) {
 		this.propietario = propietario;
 		this.nombre = nombre;
-		this.director = director;
 	}
 
 	public String getPropietario() {
@@ -35,13 +34,6 @@ public class PeliculasId implements java.io.Serializable {
 		this.nombre = nombre;
 	}
 
-	public String getDirector() {
-		return this.director;
-	}
-
-	public void setDirector(String director) {
-		this.director = director;
-	}
 
 	public boolean equals(Object other) {
 		if ((this == other))
@@ -55,9 +47,7 @@ public class PeliculasId implements java.io.Serializable {
 		return ((this.getPropietario() == castOther.getPropietario()) || (this.getPropietario() != null
 				&& castOther.getPropietario() != null && this.getPropietario().equals(castOther.getPropietario())))
 				&& ((this.getNombre() == castOther.getNombre()) || (this.getNombre() != null
-						&& castOther.getNombre() != null && this.getNombre().equals(castOther.getNombre())))
-				&& ((this.getDirector() == castOther.getDirector()) || (this.getDirector() != null
-						&& castOther.getDirector() != null && this.getDirector().equals(castOther.getDirector())));
+						&& castOther.getNombre() != null && this.getNombre().equals(castOther.getNombre())));
 	}
 
 	public int hashCode() {
@@ -65,7 +55,6 @@ public class PeliculasId implements java.io.Serializable {
 
 		result = 37 * result + (getPropietario() == null ? 0 : this.getPropietario().hashCode());
 		result = 37 * result + (getNombre() == null ? 0 : this.getNombre().hashCode());
-		result = 37 * result + (getDirector() == null ? 0 : this.getDirector().hashCode());
 		return result;
 	}
 

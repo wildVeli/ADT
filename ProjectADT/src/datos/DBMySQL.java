@@ -213,7 +213,7 @@ public class DBMySQL {
 				}
 
 				break;
-			case "Pelï¿½cula":
+			case "Película":
 				contenido= new Pelicula();
 				sql = "SELECT * FROM peliculas WHERE lower(propietario) like ?";
 				try {
@@ -233,7 +233,7 @@ public class DBMySQL {
 				}
 
 				break;
-			case "Mï¿½sica":
+			case "Música":
 				contenido= new Musica();
 				sql = "SELECT * FROM musica WHERE lower(propietario) like ?";
 				try {
@@ -311,10 +311,10 @@ public class DBMySQL {
 			case "Serie":
 				sql = "DELETE FROM series WHERE lower(propietario) like lower(?) and lower(nombre) like lower(?)";
 				break;
-			case "Pelï¿½cula":
+			case "Película":
 				sql = "DELETE FROM peliculas WHERE lower(propietario) like lower(?) and lower(nombre) like  lower(?)";
 				break;
-			case "Mï¿½sica":
+			case "Música":
 				sql = "DELETE FROM musica WHERE lower(propietario) like lower(?)  and lower(nombre) like  lower(?)";
 				break;
 			case "Libro":
@@ -343,10 +343,10 @@ public class DBMySQL {
 				case "Serie":
 					sql = "UPDATE series set recomendado = 1 where lower(propietario) like ? and lower(nombre) like ?";
 					break;
-				case "Pelï¿½cula":
+				case "Película":
 					sql = "UPDATE peliculas set recomendado = 1 where lower(propietario) like ? and lower(nombre) like ?";
 					break;
-				case "Mï¿½sica":
+				case "Música":
 					sql = "UPDATE musica set recomendado = 1 where lower(propietario) like ? and lower(nombre) like ?";
 					break;
 				case "Libro":
@@ -411,7 +411,7 @@ public class DBMySQL {
 				}
 			}
 			break;
-		case "Pelï¿½cula":
+		case "Película":
 			Pelicula peli= (Pelicula) contenido;
 			try {
 				String sql = "INSERT INTO peliculas values (?,?,?,?,?,?)";
@@ -436,7 +436,7 @@ public class DBMySQL {
 				}
 			}					
 			break;
-		case "Mï¿½sica":
+		case "Música":
 			Musica musica= (Musica) contenido;
 			try {
 				String sql = "INSERT INTO musica values (?,?,?,?,?,?,?)";
@@ -508,7 +508,7 @@ public class DBMySQL {
 				stat.setString(6, serie.getNombre());
 				System.out.println(serie.getGenero());
 				break;
-			case "Pelï¿½cula":
+			case "Película":
 				Pelicula peli= (Pelicula) contenido;
 				sql ="UPDATE peliculas SET genero=?,recomendado=?,puntuacion=?,director=? WHERE lower(propietario) like lower(?) and lower(nombre) like lower(?)";
 				stat = con.prepareStatement(sql);
@@ -519,7 +519,7 @@ public class DBMySQL {
 				stat.setString(5, nombreUsuario);
 				stat.setString(6, peli.getNombre());
 				break;
-			case "Mï¿½sica":
+			case "Música":
 				Musica musica= (Musica) contenido;
 				sql ="UPDATE musica SET genero=?,recomendado=?,puntuacion=?,tipo=?,cantante=? WHERE lower(propietario) like lower(?) and lower(nombre) like lower(?)";
 				stat = con.prepareStatement(sql);
@@ -569,12 +569,7 @@ public class DBMySQL {
 		Calendario calendario=new Calendario();
 		ArrayList<Calendario> calendarios = new ArrayList<Calendario>();
 		ResultSet rs = null;
-		/*
-		MongoClient mongoClient = new MongoClient();
-		DB database = mongoClient.getDB("contenidos");
-		DBCollection collection = database.getCollection("calendarios");
-		DBCursor cursor = collection.find(new BasicDBObject("propietario",nombreUsuario));	
-		*/
+
 		try{
 			this.connect();
 			String sql = "select dia,serie from calendarios where lower(id) like lower(?) order by dia";

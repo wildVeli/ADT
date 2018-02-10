@@ -10,15 +10,17 @@ public class Libros implements java.io.Serializable {
 	private String genero;
 	private int recomendado;
 	private int puntuacion;
+	private String autor;
 
 	public Libros() {
 	}
 
-	public Libros(LibrosId id, String genero, int recomendado, int puntuacion) {
+	public Libros(LibrosId id, String genero, int recomendado, int puntuacion,String autor) {
 		this.id = id;
 		this.genero = genero;
 		this.recomendado = recomendado;
 		this.puntuacion = puntuacion;
+		this.autor = autor;
 	}
 
 	public LibrosId getId() {
@@ -52,5 +54,14 @@ public class Libros implements java.io.Serializable {
 	public void setPuntuacion(int puntuacion) {
 		this.puntuacion = puntuacion;
 	}
+
+	public String getAutor() {
+		return autor;
+	}
+
+	public void setAutor(String autor) {
+		this.autor = autor;
+	}
+	
 
 }

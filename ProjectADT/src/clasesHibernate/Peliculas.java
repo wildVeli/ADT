@@ -10,15 +10,17 @@ public class Peliculas implements java.io.Serializable {
 	private String genero;
 	private int recomendado;
 	private int puntuacion;
+	private String director;
 
 	public Peliculas() {
 	}
 
-	public Peliculas(PeliculasId id, String genero, int recomendado, int puntuacion) {
+	public Peliculas(PeliculasId id, String genero, int recomendado, int puntuacion,String director) {
 		this.id = id;
 		this.genero = genero;
 		this.recomendado = recomendado;
 		this.puntuacion = puntuacion;
+		this.director = director;
 	}
 
 	public PeliculasId getId() {
@@ -52,5 +54,14 @@ public class Peliculas implements java.io.Serializable {
 	public void setPuntuacion(int puntuacion) {
 		this.puntuacion = puntuacion;
 	}
+
+	public String getDirector() {
+		return director;
+	}
+
+	public void setDirector(String director) {
+		this.director = director;
+	}
+	
 
 }

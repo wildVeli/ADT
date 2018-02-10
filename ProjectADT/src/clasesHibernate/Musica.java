@@ -11,16 +11,18 @@ public class Musica implements java.io.Serializable {
 	private int recomendado;
 	private int puntuacion;
 	private String tipo;
+	private String cantante;
 
 	public Musica() {
 	}
 
-	public Musica(MusicaId id, String genero, int recomendado, int puntuacion, String tipo) {
+	public Musica(MusicaId id, String genero, int recomendado, int puntuacion, String tipo,String cantante) {
 		this.id = id;
 		this.genero = genero;
 		this.recomendado = recomendado;
 		this.puntuacion = puntuacion;
 		this.tipo = tipo;
+		this.cantante = cantante;
 	}
 
 	public MusicaId getId() {
@@ -62,5 +64,14 @@ public class Musica implements java.io.Serializable {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
+
+	public String getCantante() {
+		return cantante;
+	}
+
+	public void setCantante(String cantante) {
+		this.cantante = cantante;
+	}
+	
 
 }
