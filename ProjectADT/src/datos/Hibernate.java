@@ -500,10 +500,69 @@ public class Hibernate {
 		session.close();
 		
 	}
-	//TODO get calendarios hibernate
 	public ArrayList<Calendario> getCalendarios(String nombreUsuario) {
+		boolean existe = false;
+		//crear la sesión
+		session = sessionFactory.openSession();
+		//Crear una transacción de la sesión
+		Transaction tx = session.beginTransaction();
 
-		return null;
+		
+		String hqlQuery="";
+		Query query=null;
+		
+		hqlQuery = "from Calendarios cal where cal.id.id = :usuario and"
+				+ "order by cal.id.dia ";
+		query = session.createQuery(hqlQuery);
+			
+		query.setParameter("usuario",nombreUsuario);
+
+		boolean primero=true;
+		String anteriorCalendario="";
+		Serie serie=new Serie();
+		ArrayList<Serie> series=new ArrayList<Serie>();
+		
+		Calendario calendario=new Calendario();
+		ArrayList<Calendario> calendarios = new ArrayList<Calendario>();
+		
+		List<Calendarios> lista = query.list();
+		Iterator<Calendarios> ite =lista.iterator();
+		while(ite.hasNext()) {
+			Calendarios calendarioHibernate = (Calendarios) ite.next();
+			if(primero) {
+				anteriorCalendario=calendarioHibernate.getId().getDia();
+				
+				primero = false;
+			}
+			System.out.println("Anterior "+anteriorCalendario);
+			String actualCalendario=calendarioHibernate.getId().getDia();
+			//Comprobar valores int o string
+			serie.setNombre(calendarioHibernate.getId().getSerie());
+			
+			if(anteriorCalendario.equals(actualCalendario)) {
+				series.add(serie);
+				serie = new Serie();
+			}else {
+				calendario.setSeries(series);
+				System.out.println(anteriorCalendario);
+				calendario.setDia(anteriorCalendario);
+				calendarios.add(calendario);
+				calendario = new Calendario();
+				series = new ArrayList<Serie>();
+				series.add(serie);
+				serie = new Serie();
+				
+			}
+			anteriorCalendario=actualCalendario;
+		}
+		calendario.setSeries(series);
+		calendario.setDia(anteriorCalendario);
+		calendarios.add(calendario);
+		
+		tx.commit();
+		session.close();
+		System.out.println("size in mysql"+calendarios.size());
+		return calendarios;
 	}
 	
 	

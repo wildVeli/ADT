@@ -610,24 +610,20 @@ public class DBMySQL {
 			calendario.setDia(anteriorCalendario);
 			calendarios.add(calendario);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			if (rs != null){
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			try {
 				this.disconnect();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
