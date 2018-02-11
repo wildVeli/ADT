@@ -97,12 +97,15 @@ public class Hibernate {
 
 		Contenido contenido = new Contenido();
 		ArrayList<Object> contenidos = new ArrayList<Object>();
-		ResultSet rs = null;
-		String sql;
 		
 		
 		String hqlQuery="";
 		Query query=null;
+		
+		//crear la sesión
+		session = sessionFactory.openSession();
+		//Crear una transacción de la sesión
+		Transaction tx = session.beginTransaction();
 		
 		
 		switch (tipoContenido) {
@@ -111,7 +114,14 @@ public class Hibernate {
 				contenido = new Serie();
 				
 				hqlQuery = "from Series s where s.id.propietario = :usuario";
+				System.out.println(hqlQuery);
 				query = session.createQuery(hqlQuery);
+				
+				if (query != null) {
+					System.out.println("not null");
+				}else {
+					System.out.println("null");
+				}
 				
 				query.setParameter("usuario",nombreUsuario);
 				//Metemos el resultado en una lista
@@ -217,6 +227,9 @@ public class Hibernate {
 
 				break;
 			}
+		
+		tx.commit();
+		session.close();
 		return contenidos;
 	}
 
@@ -279,7 +292,7 @@ public class Hibernate {
 		switch (tipoContenido) {
 			
 			case "Serie":
-				hqlModif= "update Series e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Series e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =:nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("nuevoEstado",1);
@@ -288,7 +301,7 @@ public class Hibernate {
 
 				break;
 			case "Película":
-				hqlModif= "update Peliculas e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Peliculas e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =:nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("nuevoEstado",1);
@@ -297,7 +310,7 @@ public class Hibernate {
 				
 				break;
 			case "Música":
-				hqlModif= "update Musica e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Musica e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =:nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("nuevoEstado",1);
@@ -306,7 +319,7 @@ public class Hibernate {
 				
 				break;
 			case "Libro":
-				hqlModif= "update Libros e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Libros e set recomendado = :nuevoEstado where e.id.propietario = :usuario and e.id.nombre =:nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("nuevoEstado",1);
@@ -336,8 +349,10 @@ public class Hibernate {
 			Series series = new Series();
 			Serie serie= (Serie) contenido;	
 			
-			series.getId().setNombre(serie.getNombre());
-			series.getId().setPropietario(nombreUsuario);
+			System.out.println(serie.getNombre());
+			seriesid.setNombre(serie.getNombre());
+			seriesid.setPropietario(nombreUsuario);
+			series.setId(seriesid);
 			series.setGenero(serie.getGenero());
 			series.setPuntuacion(serie.getPuntucacion());
 			if(serie.getRecomendado()) {
@@ -353,10 +368,12 @@ public class Hibernate {
 		case "Película":
 			Pelicula peli= (Pelicula) contenido;
 			
+			PeliculasId peliculasid = new PeliculasId();
 			Peliculas peliculas = new Peliculas();
 			
-			peliculas.getId().setNombre(peli.getNombre());
-			peliculas.getId().setPropietario(nombreUsuario);
+			peliculasid.setNombre(peli.getNombre());
+			peliculasid.setPropietario(nombreUsuario);
+			peliculas.setId(peliculasid);
 			peliculas.setGenero(peli.getGenero());
 			peliculas.setPuntuacion(peli.getPuntucacion());
 			if(peli.getRecomendado()) {
@@ -372,10 +389,12 @@ public class Hibernate {
 		case "Música":
 			clases.Musica musica= (clases.Musica) contenido;
 			
+			MusicaId musicaid = new MusicaId();
 			Musica musicas = new Musica();
 			
-			musicas.getId().setNombre(musica.getNombre());
-			musicas.getId().setPropietario(nombreUsuario);
+			musicaid.setNombre(musica.getNombre());
+			musicaid.setPropietario(nombreUsuario);
+			musicas.setId(musicaid);
 			musicas.setGenero(musica.getGenero());
 			musicas.setPuntuacion(musica.getPuntucacion());
 			if(musica.getRecomendado()) {
@@ -392,10 +411,12 @@ public class Hibernate {
 		case "Libro":
 			Libro libro= (Libro) contenido;
 			
+			LibrosId librosid = new LibrosId();
 			Libros libros = new Libros();
 			
-			libros.getId().setNombre(libro.getNombre());
-			libros.getId().setPropietario(nombreUsuario);
+			librosid.setNombre(libro.getNombre());
+			librosid.setPropietario(nombreUsuario);
+			libros.setId(librosid);
 			libros.setGenero(libro.getGenero());
 			libros.setPuntuacion(libro.getPuntucacion());
 			if(libro.getRecomendado()) {
@@ -425,8 +446,8 @@ public class Hibernate {
 		switch (tipoContenido) {
 			
 			case "Serie":
-				hqlModif= "update Series e set genero = :gene and recomendado = :recomen and puntuacion = :puntu and"
-						+ "temporadas = :tempo where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Series e set e.genero = :gene, e.recomendado = :recomen, e.puntuacion = :puntu,"
+						+ " e.temporadas = :tempo where e.id.propietario = :usuario and e.id.nombre =:nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("gene",contenido.getGenero());
@@ -435,7 +456,7 @@ public class Hibernate {
 				}else {
 					query.setParameter("recomen",0);
 				}
-				query.setParameter("puntu",contenido.getPuntucacion());
+				query.setParameter("puntu",(int)contenido.getPuntucacion());
 				query.setParameter("tempo",((Serie)contenido).getTemporadas());
 				query.setParameter("usuario",nombreUsuario);
 				query.setParameter("nombreContenido",contenido.getNombre());
@@ -443,8 +464,8 @@ public class Hibernate {
 
 				break;
 			case "Película":
-				hqlModif= "update Peliculas e set genero = :gene and recomendado = :recomen and puntuacion = :puntu and"
-						+ "director = :direc where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Peliculas e set e.genero = :gene, e.recomendado = :recomen,  e.puntuacion = :puntu, "
+						+ "e.director = :direc where e.id.propietario = :usuario and e.id.nombre =:nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("gene",contenido.getGenero());
@@ -453,15 +474,15 @@ public class Hibernate {
 				}else {
 					query.setParameter("recomen",0);
 				}
-				query.setParameter("puntu",contenido.getPuntucacion());
+				query.setParameter("puntu",(int)contenido.getPuntucacion());
 				query.setParameter("direc",((Pelicula)contenido).getDirector());
 				query.setParameter("usuario",nombreUsuario);
 				query.setParameter("nombreContenido",contenido.getNombre());
 				
 				break;
 			case "Música":
-				hqlModif= "update Musica e set genero = :gene and recomendado = :recomen and puntuacion = :puntu and"
-						+ "cantante = :cant and tipo = :tip where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Musica e set e.genero = :gene, e.recomendado = :recomen, e.puntuacion = :puntu, "
+						+ "e.cantante = :cant, tipo = :tip where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("gene",contenido.getGenero());
@@ -470,15 +491,15 @@ public class Hibernate {
 				}else {
 					query.setParameter("recomen",0);
 				}
-				query.setParameter("puntu",contenido.getPuntucacion());
+				query.setParameter("puntu",(int)contenido.getPuntucacion());
 				query.setParameter("cant",((clases.Musica)contenido).getCantante());
 				query.setParameter("tip",((clases.Musica)contenido).getTipo());
 				query.setParameter("usuario",nombreUsuario);
 				query.setParameter("nombreContenido",contenido.getNombre());
 				break;
 			case "Libro":
-				hqlModif= "update Libros e set genero = :gene and recomendado = :recomen and puntuacion = :puntu and"
-						+ "autor = :aut where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
+				hqlModif= "update Libros e set e.genero = :gene, e.recomendado = :recomen, e.puntuacion = :puntu, "
+						+ "e.autor = :aut where e.id.propietario = :usuario and e.id.nombre =nombreContenido ";
 				query = session.createQuery(hqlModif);
 				
 				query.setParameter("gene",contenido.getGenero());
@@ -487,14 +508,14 @@ public class Hibernate {
 				}else {
 					query.setParameter("recomen",0);
 				}
-				query.setParameter("puntu",contenido.getPuntucacion());
+				query.setParameter("puntu",(int)contenido.getPuntucacion());
 				query.setParameter("aut",((Libro)contenido).getAutor());
 				query.setParameter("usuario",nombreUsuario);
 				query.setParameter("nombreContenido",contenido.getNombre());
 				break;		
 		}
-		int filasAfectadas = query.executeUpdate();
-		System.out.println(filasAfectadas);
+		query.executeUpdate();
+		//System.out.println(filasAfectadas);
 		
 		tx.commit();
 		session.close();
@@ -511,8 +532,7 @@ public class Hibernate {
 		String hqlQuery="";
 		Query query=null;
 		
-		hqlQuery = "from Calendarios cal where cal.id.id = :usuario and"
-				+ "order by cal.id.dia ";
+		hqlQuery = "from Calendarios cal where cal.id.id = :usuario order by cal.id.dia ";
 		query = session.createQuery(hqlQuery);
 			
 		query.setParameter("usuario",nombreUsuario);

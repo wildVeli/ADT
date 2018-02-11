@@ -93,14 +93,14 @@ public class JPanelLogin extends JPanel {
 		add(rdbtnMongodb);
 		rdbtnMongodb.addActionListener(radioGroupListener);
 		
-		rdbtnDbrelacional = new JRadioButton("DBRelacional");
+		rdbtnDbrelacional = new JRadioButton("MySQL");
 		rdbtnDbrelacional.setForeground(Color.BLACK);
 		rdbtnDbrelacional.setBackground(Color.LIGHT_GRAY);
 		rdbtnDbrelacional.setBounds(765, 689, 123, 23);
 		add(rdbtnDbrelacional);
 		rdbtnDbrelacional.addActionListener(radioGroupListener);
 		
-		radioButton_2 = new JRadioButton("");
+		radioButton_2 = new JRadioButton("Hibernate");
 		radioButton_2.setForeground(Color.BLACK);
 		radioButton_2.setBackground(Color.LIGHT_GRAY);
 		radioButton_2.setBounds(890, 689, 123, 23);

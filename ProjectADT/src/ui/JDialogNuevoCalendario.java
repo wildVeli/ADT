@@ -117,7 +117,7 @@ public class JDialogNuevoCalendario extends JDialog {
 
 
 		}else {
-			lblTitulo.setText("Aï¿½adir");
+			lblTitulo.setText("A\u00F1adir");
 			botonAnadirNuevo = new JButton("A\u00F1adir");
 			botonAnadirNuevo.setFocusPainted(false);
 			botonAnadirNuevo.setRolloverEnabled(false);
@@ -183,10 +183,10 @@ public class JDialogNuevoCalendario extends JDialog {
 		getContentPane().add(comboDiasSemana);
 		comboDiasSemana.addItem("Lunes");
 		comboDiasSemana.addItem("Martes");
-		comboDiasSemana.addItem("Miï¿½rcoles");
+		comboDiasSemana.addItem("Miércoles");
 		comboDiasSemana.addItem("Jueves");
 		comboDiasSemana.addItem("Viernes");
-		comboDiasSemana.addItem("Sï¿½bado");
+		comboDiasSemana.addItem("Sábado");
 		comboDiasSemana.addItem("Domingo");
 	}
 	

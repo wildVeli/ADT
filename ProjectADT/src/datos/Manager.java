@@ -13,6 +13,7 @@ public class Manager {
 	private DBObjectsManager dbManager;
 	private DBmongo dbMongo;
 	private DBMySQL dbMysql;
+	private Hibernate hibernate;
 	
 	
 	public Manager(){
@@ -20,6 +21,7 @@ public class Manager {
 			dbManager = new DBObjectsManager();
 			dbMongo = new DBmongo();
 			dbMysql = new DBMySQL();
+			hibernate = new Hibernate();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -50,6 +52,7 @@ public class Manager {
 				existe = dbMysql.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 			case 4:
+				existe = hibernate.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 		}
 		return existe;
@@ -73,6 +76,7 @@ public class Manager {
 				dbMysql.registrarUsuario(nombreUsuario, password);
 				break;
 			case 4:
+				hibernate.registrarUsuario(nombreUsuario, password);
 				break;
 		}
 	}
@@ -99,6 +103,7 @@ public class Manager {
 				contenido=dbMysql.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 			case 4:
+				contenido=hibernate.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 		}
 		return contenido;
@@ -122,6 +127,7 @@ public class Manager {
 			dbMysql.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 4:
+			hibernate.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		}
 	}
@@ -144,6 +150,7 @@ public class Manager {
 			dbMysql.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 4:
+			hibernate.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		}
 	}
@@ -167,6 +174,7 @@ public class Manager {
 			dbMysql.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 4:
+			hibernate.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		}
 	}
@@ -185,12 +193,12 @@ public class Manager {
 			break;
 		case 2:
 			dbMongo.modificarContenido(nombreUsuario,contenido, tipoContenido);
-
 			break;
 		case 3:
 			dbMysql.modificarContenido(nombreUsuario,contenido, tipoContenido);
 			break;
 		case 4:
+			hibernate.modificarContenido(nombreUsuario,contenido, tipoContenido);
 			break;
 		}
 	}
@@ -217,6 +225,7 @@ public class Manager {
 				calendarios=dbMysql.getCalendarios(nombreUsuario);
 				break;
 			case 4:
+				calendarios=hibernate.getCalendarios(nombreUsuario);
 				break;
 		}
 		return calendarios; 
@@ -241,6 +250,7 @@ public class Manager {
 			dbMysql.borrarRegistroCalendario(nombreUsuario,dia,registro);
 			break;
 		case 4:
+			hibernate.borrarRegistroCalendario(nombreUsuario,dia,registro);
 			break;
 		}
 	}
@@ -264,6 +274,7 @@ public class Manager {
 				dbMysql.nuevoRegistroCalendario(nombreUsuario,dia,registro);
 				break;
 			case 4:
+				hibernate.nuevoRegistroCalendario(nombreUsuario,dia,registro);
 				break;
 		}
 	}
@@ -288,6 +299,7 @@ public class Manager {
 				series=dbMysql.getRecomendacionesAmigos(nombreUsuario);
 				break;
 			case 4:
+				series=hibernate.getRecomendacionesAmigos(nombreUsuario);
 				break;
 		}
 		return series;
