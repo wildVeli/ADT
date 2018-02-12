@@ -172,10 +172,6 @@ public class DBMySQL {
 
 	public ArrayList<Object> getContenidoDeUnTipo(String nombreUsuario, String tipoContenido) {
 		
-		Serie serie;
-		Pelicula pelicula;
-		Musica musica;
-		Libro libro;
 		Contenido contenido = new Contenido();
 		ArrayList<Object> contenidos = new ArrayList<Object>();
 		ResultSet rs = null;

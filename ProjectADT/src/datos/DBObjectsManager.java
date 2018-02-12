@@ -149,6 +149,7 @@ public class DBObjectsManager {
 			e.printStackTrace();
 		}finally {
 			try {
+				con.commit();
 				this.disconnect();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -335,6 +336,7 @@ public class DBObjectsManager {
 		try {
 			stat = con.prepareStatement(query);
 			stat.executeUpdate();
+			con.commit();
 			this.disconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -374,10 +376,11 @@ public class DBObjectsManager {
 				break;		
 		}
 		
-			query= "UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set contenido.recomendado = 0 where lower(contenido.nombre) like lower('"+nombreContenido+"')";
+			query= "UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set contenido.recomendado = 1 where lower(contenido.nombre) like lower('"+nombreContenido+"')";
 		try {
 			stat = con.prepareStatement(query);
 			stat.executeUpdate();
+			con.commit();
 			this.disconnect();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -392,6 +395,130 @@ public class DBObjectsManager {
 	 * @param contenido contenido que se añadira al usuario
 	 */
 	public void anadirNuevoContenido(String nombreUsuario, Contenido contenido, String tipoContenido) {
+		try {
+			this.connect();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String tipo = null;
+
+		switch (tipoContenido) {
+		
+		case "Serie":
+			Serie serie= (Serie) contenido;	
+			tipo = "seriesAni";
+			try {
+				String sql = "insert into TABLE (SELECT "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) values(tipoSeries(?,?,?,?,?))";
+				stat = con.prepareStatement(sql);
+				
+				stat.setString(1, serie.getNombre());
+				stat.setString(2, serie.getGenero());
+				stat.setBoolean(3, serie.getRecomendado());
+				stat.setInt(4, serie.getPuntucacion());
+				stat.setInt(5, serie.getTemporadas());
+				
+				stat.executeUpdate();
+				
+	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					con.commit();
+					this.disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			break;
+		case "Película":
+			Pelicula peli= (Pelicula) contenido;
+			tipo = "peliculasAni";
+
+			try {
+				String sql = "insert into TABLE (SELECT "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) values(tipoPeliculas(?,?,?,?,?))";
+				stat = con.prepareStatement(sql);
+				stat.setString(1, peli.getNombre());
+				stat.setString(2, peli.getGenero());
+				stat.setBoolean(3, peli.getRecomendado());
+				stat.setInt(4, peli.getPuntucacion());
+				stat.setString(5, peli.getDirector());
+				stat.executeUpdate();
+	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					con.commit();
+					this.disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}					
+			break;
+		case "Música":
+			Musica musica= (Musica) contenido;
+			tipo = "musicaAni";
+
+			try {
+				String sql = "insert into TABLE (SELECT "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) values(tipoMusica(?,?,?,?,?,?))";
+				stat = con.prepareStatement(sql);
+				stat.setString(1, musica.getNombre());
+				stat.setString(2, musica.getGenero());
+				stat.setBoolean(3, musica.getRecomendado());
+				stat.setInt(4, musica.getPuntucacion());
+				stat.setString(5, musica.getTipo());
+				stat.setString(6, musica.getCantante());
+				stat.executeUpdate();
+	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					con.commit();
+					this.disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}		
+			break;
+		case "Libro":
+			Libro libro= (Libro) contenido;
+			tipo = "librosAni";
+			try {
+				String sql = "insert into TABLE (SELECT "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) values(tipoLibros(?,?,?,?,?))";
+				stat = con.prepareStatement(sql);
+				stat.setString(1, libro.getNombre());
+				stat.setString(2, libro.getGenero());
+				stat.setBoolean(3, libro.getRecomendado());
+				stat.setInt(4, libro.getPuntucacion());
+				stat.setString(5, libro.getAutor());
+				stat.executeUpdate();
+	
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					con.commit();
+					this.disconnect();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}	
+			break;
+		}
 
 		
 	}
@@ -400,8 +527,102 @@ public class DBObjectsManager {
 	 * @param nombreUsuario nombre del usuario al que se le modificará el contenido
 	 * @param contenido contenido modificado que se utilizará para reemplazar los datos del viejo
 	 */
-	public void modificarContenido(String nombreUsuario, Contenido contenido) {
-		// TODO Auto-generated method stub
+	public void modificarContenido(String nombreUsuario, Contenido contenido,String tipoContenido) {
+		try {
+			this.connect();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String query = null;
+		String tipo = "";
+		try {
+			this.connect();
+			switch (tipoContenido) {
+			
+			case "Serie":
+				Serie serie= (Serie) contenido;
+				tipo = "seriesAni";
+				query = "UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set "
+						+ "contenido.genero = ?"
+						+ ",contenido.recomendado = ? "
+						+ ",contenido.puntuacion = ? "
+						+ ",contenido.temporadas = ? "
+						+ "where lower(contenido.nombre) like lower('"+serie.getNombre()+"')";
+				stat = con.prepareStatement(query);
+				stat.setString(1, serie.getGenero());
+				stat.setBoolean(2, serie.getRecomendado());
+				stat.setInt(3, serie.getPuntucacion());
+				stat.setInt(4,serie.getTemporadas());
+				System.out.println(serie.getGenero());
+				break;
+			case "Película":
+				Pelicula peli= (Pelicula) contenido;
+				tipo = "peliculasAni";
+				query = "UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set "
+						+ "contenido.genero = ?"
+						+ ",contenido.recomendado = ? "
+						+ ",contenido.puntuacion = ? "
+						+ ",contenido.director = ? "
+						+ "where lower(contenido.nombre) like lower('"+peli.getNombre()+"')";
+				stat = con.prepareStatement(query);
+				stat.setString(1, peli.getGenero());
+				stat.setBoolean(2, peli.getRecomendado());
+				stat.setInt(3, peli.getPuntucacion());
+				stat.setString(4,peli.getDirector());
+				break;
+			case "Música":
+				Musica musica= (Musica) contenido;
+				tipo = "musicaAni";
+				query = "UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set "
+						+ "contenido.genero = ?"
+						+ ",contenido.recomendado = ? "
+						+ ",contenido.puntuacion = ? "
+						+ ",contenido.tipo = ? "
+						+ ",contenido.cantante = ?"
+						+ "where lower(contenido.nombre) like lower('"+musica.getNombre()+"')";
+				stat = con.prepareStatement(query);
+				stat.setString(1, musica.getGenero());
+				stat.setBoolean(2, musica.getRecomendado());
+				stat.setInt(3, musica.getPuntucacion());
+				stat.setString(4,musica.getTipo());
+				stat.setString(5, musica.getCantante());
+				break;
+			case "Libro":
+				Libro libro= (Libro) contenido;
+				tipo = "librosAni";
+				query = "UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set "
+						+ "contenido.genero = ?"
+						+ ",contenido.recomendado = ? "
+						+ ",contenido.puntuacion = ? "
+						+ ",contenido.autor = ? "
+						+ "where lower(contenido.nombre) like lower('"+libro.getNombre()+"')";
+				stat = con.prepareStatement(query);
+				stat.setString(1, libro.getGenero());
+				stat.setBoolean(2, libro.getRecomendado());
+				stat.setInt(3, libro.getPuntucacion());
+				stat.setString(4,libro.getAutor());
+				break;
+			}
+			stat.executeUpdate();
+			con.commit();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				this.disconnect();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	
@@ -412,8 +633,73 @@ public class DBObjectsManager {
 	 * @return devuelve los calendarios del usuario
 	 */
 	public ArrayList<Calendario> getCalendarios(String nombreUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+		Serie serie=new Serie();
+		ArrayList<Serie> series=new ArrayList<Serie>();
+		
+		Calendario calendario=new Calendario();
+		ArrayList<Calendario> calendarios = new ArrayList<Calendario>();
+		ResultSet rs = null;
+
+		try{
+			this.connect();
+			String sql = "select dia,serie from calendarios where lower(usu) like lower(?) order by dia";
+			stat = con.prepareStatement(sql);
+			stat.setString(1, nombreUsuario);
+			rs = stat.executeQuery();
+			boolean primero=true;
+			String anteriorCalendario="";
+			
+			while(rs.next()) {
+				if(primero) {
+					anteriorCalendario=rs.getString("dia");
+					
+					primero = false;
+				}
+				System.out.println("Anterior "+anteriorCalendario);
+				String actualCalendario=rs.getString("dia");
+				//Comprobar valores int o string
+				serie.setNombre(rs.getString("serie"));
+				
+				if(anteriorCalendario.equals(actualCalendario)) {
+					series.add(serie);
+					serie = new Serie();
+				}else {
+					calendario.setSeries(series);
+					System.out.println(anteriorCalendario);
+					calendario.setDia(anteriorCalendario);
+					calendarios.add(calendario);
+					calendario = new Calendario();
+					series = new ArrayList<Serie>();
+					series.add(serie);
+					serie = new Serie();
+					
+				}
+				anteriorCalendario=actualCalendario;
+			}
+			calendario.setSeries(series);
+			calendario.setDia(anteriorCalendario);
+			calendarios.add(calendario);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			if (rs != null){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				con.commit();
+				this.disconnect();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("size in mysql"+calendarios.size());
+		return calendarios;
 	}
 	/**
 	 * Método que borra un registro de un calendario en concreto
@@ -422,7 +708,23 @@ public class DBObjectsManager {
 	 * @param registro que dato se borrará de el calendario
 	 */
 	public void borrarRegistroCalendario(String nombreUsuario, String dia, String registro) {
-		// TODO Auto-generated method stub
+		try {
+			this.connect();
+			String sql = "delete from calendarios where lower(usu) like lower('"+nombreUsuario+"') and lower(dia) like lower('"+dia+"') and lower(serie) like lower('"+registro+"')";
+			stat = con.prepareStatement(sql);
+			stat.executeUpdate();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				con.commit();
+				this.disconnect();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	/**
 	 * Método que añade un registro a un calendario de un usuario
@@ -431,7 +733,25 @@ public class DBObjectsManager {
 	 * @param registro el nuevo dato que se le añadirá al calendario
 	 */
 	public void nuevoRegistroCalendario(String nombreUsuario, String dia, String registro) {
-		// TODO Auto-generated method stub
+
+		try {
+			this.connect();
+			String sql = "insert into calendarios values ('"+nombreUsuario+"','"+dia+"','"+registro+"')";
+			stat = con.prepareStatement(sql);
+			stat.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				con.commit();
+				this.disconnect();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+			
 	}
 	//RECOMENDACIONES------------------------------------------------------------------------------------------------------------------------------------------------------------
 	/**
