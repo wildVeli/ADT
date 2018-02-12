@@ -1,11 +1,18 @@
 nombre bases de datos
 
--MySQL contenidos
+-MySQL XE
 
--Mongo contenidos
+-Mongo XE
 
 -Hibernate XE
 
+-Objeto Relacional XE
+
+-------Apunte----------
+Solo utilizo un archivo de db.properties para conectar las distintas bases de datos, se deberá por tanto cambiar
+datos como el puerto segun que puerto se encuentre instalado la base de datos, si es necesario
+
+-Hibernate
 Existe un bug por el cual si se borra la ultima serie de un calendarios no se actualiza bien,
 solo se actualiza bien en caso de haber más de un calendario.
 

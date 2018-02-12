@@ -71,7 +71,7 @@ create table  calendarios of tipoCalendarios(
 / 
 
 
-INSERT INTO usuarios VALUES('1','passi',
+INSERT INTO usuarios VALUES('marta','1234',
 tabla_anidadaAmigos(tipoAmigos('juan')),
 tabla_anidadaSeries(tipoSeries('house','fantasia',1,8,4)),
 tabla_anidadaMusica(tipoMusica('chocolate','metal',1,8,'cancion','baby metal')),

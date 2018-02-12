@@ -1,4 +1,4 @@
-use contenidos
+use XE
 
 
 db.series.insert({propietario:"sara",nombre:"House",genero:"Ficción",recomendado:true,puntuacion:"8",temporadas:"7"})
@@ -30,13 +30,5 @@ db.calendarios.insert({propietario:"juan",dia:"domingo",series:[]})
 
 
 
-//private Color colorTablasFondo =new Color(219, 219, 219);
 
-		/*
-		jPanelCalendario=new JPanelCalendario();
-		jPanelCalendario.setBounds(269, 39, 755, 729);
-		fondo.add(jPanelCalendario);
-		*/
-		
-		
 	

@@ -6,6 +6,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ import java.util.Properties;
 
 import clases.Calendario;
 import clases.Contenido;
+import clases.Libro;
+import clases.Musica;
+import clases.Pelicula;
 import clases.Serie;
 
 public class DBObjectsManager {
@@ -24,6 +28,7 @@ public class DBObjectsManager {
 	private String dbUserName;
 	private String dbPassword;
 	private String dbPort;
+	private Statement stmt;
 	
 	/**
 	 * Abre un flujo para recoger del archivo config varios parametros y pasarlos a atributos que luego se utilizarán para conectarse a la base de datos
@@ -150,7 +155,6 @@ public class DBObjectsManager {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	//CONTENIDOS-------------------------------------------------------------------------------------------------------------------------------------------------------------
 	/**
@@ -160,16 +164,182 @@ public class DBObjectsManager {
 	 * @return devuelve los contenidos de un usuario del tipo especificado
 	 */
 	public ArrayList<Object> getContenidoDeUnTipo(String nombreUsuario, String tipoContenido) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			this.connect();
+		} catch (ClassNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		Contenido contenido = new Contenido();
+		ArrayList<Object> contenidos = new ArrayList<Object>();
+		String tipo = null;
+		String query;
+		ResultSet rs;
+		try {
+			
+			switch (tipoContenido) {
+	
+			case "Serie":
+				contenido = new Serie();
+				tipo = "seriesAni";
+				query = "select a.* from usuarios u, table("+tipo+") a where lower(u.id) like lower('"+nombreUsuario+"')";
+				try {
+					stmt = con.createStatement();
+					rs = stmt.executeQuery(query);
+					//stat = con.prepareStatement(query);
+					//rs = stat.executeQuery();
+					while (rs.next()) {
+						fillCommonContent(contenido,rs);
+						((Serie)contenido).setTemporadas(rs.getInt("temporadas"));
+						contenidos.add(contenido);
+						contenido = new Serie();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	
+				break;
+			case "Película":
+				contenido = new Pelicula();
+				tipo = "peliculasAni";
+				query = "select a.* from usuarios u, table("+tipo+") a where lower(u.id) like lower('"+nombreUsuario+"')";
+				try {
+					stat = con.prepareStatement(query);
+					rs = stat.executeQuery();
+					while (rs.next()) {
+						fillCommonContent(contenido,rs);
+						((Pelicula)contenido).setDirector(rs.getString("director"));
+						contenidos.add(contenido);
+						
+						contenido=new Pelicula();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				break;
+			case "Música":
+				contenido = new Musica();
+				tipo = "musicaAni";
+				query = "select a.* from usuarios u, table("+tipo+") a where lower(u.id) like lower('"+nombreUsuario+"')";
+				try {
+					stat = con.prepareStatement(query);
+					rs = stat.executeQuery();
+					while (rs.next()) {
+						fillCommonContent(contenido,rs);
+						((Musica)contenido).setTipo(rs.getString("tipo"));
+						((Musica)contenido).setCantante(rs.getString("cantante"));
+						contenidos.add(contenido);
+						contenido= new Musica();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				break;
+			case "Libro":
+				contenido = new Libro();
+				tipo = "librosAni";
+				query = "select a.* from usuarios u, table("+tipo+") a where lower(u.id) like lower('"+nombreUsuario+"')";
+				try {
+					stat = con.prepareStatement(query);
+					rs = stat.executeQuery();
+					while (rs.next()) {
+						
+						fillCommonContent(contenido,rs);
+						((Libro)contenido).setAutor(rs.getString("autor"));
+						contenidos.add(contenido);
+						contenido= new Libro();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}			break;
+			}
+
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		try {
+			this.disconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		return contenidos;
+	}
+	private void fillCommonContent(Contenido contenido, ResultSet rs) {
+		try {
+			contenido.setNombre(rs.getString("nombre"));
+			contenido.setGenero(rs.getString("genero"));
+			System.out.println(rs.getInt("recomendado"));
+			if(rs.getInt("recomendado")==1) {
+				contenido.setRecomendado(true);
+			}else {
+				contenido.setRecomendado(false);
+			}
+			contenido.setPuntucacion((short)rs.getInt("puntuacion"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 	}
 	/**
 	 * Método que borra un contenido de la base de datos
 	 * @param nombreUsuario nombre del usuario al que pertenece dicho contenido
 	 * @param nombreContenido nombre del contenido que se borrará
 	 */
-	public void borrarContenidoSeleccionado(String nombreUsuario, String nombreContenido) {
-		// TODO Auto-generated method stub
+	public void borrarContenidoSeleccionado(String nombreUsuario, String nombreContenido, String tipoContenido) {
+		try {
+			this.connect();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String tipo = null;
+		String query = null;
+		switch (tipoContenido) {	
+			case "Serie":
+				tipo = "seriesAni";
+				break;
+			case "Película":
+				tipo = "peliculasAni";
+				break;
+			case "Música":
+				tipo = "musicaAni";
+				break;
+			case "Libro":
+				tipo = "librosAni";
+				break;		
+		}
+		
+			query= "DELETE from table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido where lower(contenido.nombre) like lower('"+nombreContenido+"')";
+		try {
+			stat = con.prepareStatement(query);
+			stat.executeUpdate();
+			this.disconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	/**
@@ -177,8 +347,42 @@ public class DBObjectsManager {
 	 * @param nombreUsuario	nombre del usuario al que pertenece dicho contenido
 	 * @param nombreContenido nombre del contenido que se establecera como recomendado
 	 */
-	public void recomendarContenidoSeleccionado(String nombreUsuario, String nombreContenido) {
-		// TODO Auto-generated method stub
+	public void recomendarContenidoSeleccionado(String nombreUsuario, String nombreContenido,String tipoContenido) {
+		try {
+			this.connect();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String tipo = null;
+		String query = null;
+		switch (tipoContenido) {	
+			case "Serie":
+				tipo = "seriesAni";
+				break;
+			case "Película":
+				tipo = "peliculasAni";
+				break;
+			case "Música":
+				tipo = "musicaAni";
+				break;
+			case "Libro":
+				tipo = "librosAni";
+				break;		
+		}
+		
+			query= "UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set contenido.recomendado = 0 where lower(contenido.nombre) like lower('"+nombreContenido+"')";
+		try {
+			stat = con.prepareStatement(query);
+			stat.executeUpdate();
+			this.disconnect();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	/**

@@ -13,7 +13,7 @@ public class Manager {
 	private DBObjectsManager dbManager;
 	private DBmongo dbMongo;
 	private DBMySQL dbMysql;
-	private Hibernate hibernate;
+	private Hibernate hibernate = null;
 	
 	
 	public Manager(){
@@ -21,7 +21,7 @@ public class Manager {
 			dbManager = new DBObjectsManager();
 			dbMongo = new DBmongo();
 			dbMysql = new DBMySQL();
-			hibernate = new Hibernate();
+			
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -40,6 +40,7 @@ public class Manager {
 	 */
 	public boolean validarUsuario(String nombreUsuario,String password,String tipoAccion,short tipo)  {
 		boolean existe=true;
+		boolean primero=true;
 		switch(tipo){
 		
 			case 1:	
@@ -52,6 +53,9 @@ public class Manager {
 				existe = dbMysql.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 			case 4:
+				if(hibernate == null) {
+					hibernate = new Hibernate();
+				}
 				existe = hibernate.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 		}
@@ -76,6 +80,9 @@ public class Manager {
 				dbMysql.registrarUsuario(nombreUsuario, password);
 				break;
 			case 4:
+				if(hibernate == null) {
+					hibernate = new Hibernate();
+				}
 				hibernate.registrarUsuario(nombreUsuario, password);
 				break;
 		}
@@ -118,7 +125,7 @@ public class Manager {
 	public void borrarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo){
 		switch(tipo){
 		case 1:
-			dbManager.borrarContenidoSeleccionado(nombreUsuario,nombreContenido);
+			dbManager.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 2:
 			dbMongo.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
@@ -141,7 +148,7 @@ public class Manager {
 	public void recomendarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo) {
 		switch(tipo){
 		case 1:
-			dbManager.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido);
+			dbManager.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 2:
 			dbMongo.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
