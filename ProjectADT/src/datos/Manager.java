@@ -12,11 +12,17 @@ public class Manager {
 	
 	private DBObjectsManager dbManager;
 	private DBmongo dbMongo;
+	private DBMySQL dbMysql;
+	private Hibernate hibernate = null;
+	
 	
 	public Manager(){
 		try {
 			dbManager = new DBObjectsManager();
 			dbMongo = new DBmongo();
+			dbMysql = new DBMySQL();
+			
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -34,6 +40,7 @@ public class Manager {
 	 */
 	public boolean validarUsuario(String nombreUsuario,String password,String tipoAccion,short tipo)  {
 		boolean existe=true;
+		boolean primero=true;
 		switch(tipo){
 		
 			case 1:	
@@ -43,8 +50,13 @@ public class Manager {
 				existe = dbMongo.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 			case 3:
+				existe = dbMysql.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 			case 4:
+				if(hibernate == null) {
+					hibernate = new Hibernate();
+				}
+				existe = hibernate.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 		}
 		return existe;
@@ -65,8 +77,13 @@ public class Manager {
 				dbMongo.registrarUsuario(nombreUsuario, password);
 				break;
 			case 3:
+				dbMysql.registrarUsuario(nombreUsuario, password);
 				break;
 			case 4:
+				if(hibernate == null) {
+					hibernate = new Hibernate();
+				}
+				hibernate.registrarUsuario(nombreUsuario, password);
 				break;
 		}
 	}
@@ -80,8 +97,8 @@ public class Manager {
 	 * @return devuelve una lista del contenido del usuario de dicho tipo
 	 * @throws IOException 
 	 */
-	public ArrayList<Contenido> getContenidoDeUnTipo (String nombreUsuario,String tipoContenido,short tipo) {
-		ArrayList<Contenido> contenido = null;
+	public ArrayList<Object> getContenidoDeUnTipo (String nombreUsuario,String tipoContenido,short tipo) {
+		ArrayList<Object> contenido = null;
 		switch(tipo){
 			case 1:
 				contenido=dbManager.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
@@ -90,8 +107,10 @@ public class Manager {
 				contenido=dbMongo.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 			case 3:
+				contenido=dbMysql.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 			case 4:
+				contenido=hibernate.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 		}
 		return contenido;
@@ -106,14 +125,16 @@ public class Manager {
 	public void borrarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo){
 		switch(tipo){
 		case 1:
-			dbManager.borrarContenidoSeleccionado(nombreUsuario,nombreContenido);
+			dbManager.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 2:
 			dbMongo.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 3:
+			dbMysql.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 4:
+			hibernate.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		}
 	}
@@ -127,14 +148,16 @@ public class Manager {
 	public void recomendarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo) {
 		switch(tipo){
 		case 1:
-			dbManager.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido);
+			dbManager.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 2:
 			dbMongo.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 3:
+			dbMysql.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 4:
+			hibernate.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		}
 	}
@@ -155,8 +178,10 @@ public class Manager {
 			dbMongo.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 3:
+			dbMysql.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 4:
+			hibernate.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		}
 	}
@@ -175,11 +200,12 @@ public class Manager {
 			break;
 		case 2:
 			dbMongo.modificarContenido(nombreUsuario,contenido, tipoContenido);
-
 			break;
 		case 3:
+			dbMysql.modificarContenido(nombreUsuario,contenido, tipoContenido);
 			break;
 		case 4:
+			hibernate.modificarContenido(nombreUsuario,contenido, tipoContenido);
 			break;
 		}
 	}
@@ -193,19 +219,20 @@ public class Manager {
 	 * @return devuelve los calendarios que tiene el usuario
 	 * @throws IOException 
 	 */
-	public ArrayList<Calendario> getCalendarios (String nombreUsuario,short calendario,short tipo) {
+	public ArrayList<Calendario> getCalendarios (String nombreUsuario,short tipo) {
 		ArrayList<Calendario> calendarios=new ArrayList<Calendario>();
 		switch(tipo){
 			case 1:
-				calendarios=dbManager.getCalendarios(nombreUsuario,calendario);
+				calendarios=dbManager.getCalendarios(nombreUsuario);
 				break;
 			case 2:
-				calendarios=dbMongo.getCalendarios(nombreUsuario,calendario);
-
+				calendarios=dbMongo.getCalendarios(nombreUsuario);
 				break;
 			case 3:
+				calendarios=dbMysql.getCalendarios(nombreUsuario);
 				break;
 			case 4:
+				calendarios=hibernate.getCalendarios(nombreUsuario);
 				break;
 		}
 		return calendarios; 
@@ -225,11 +252,12 @@ public class Manager {
 			break;
 		case 2:
 			dbMongo.borrarRegistroCalendario(nombreUsuario,dia,registro);
-
 			break;
 		case 3:
+			dbMysql.borrarRegistroCalendario(nombreUsuario,dia,registro);
 			break;
 		case 4:
+			hibernate.borrarRegistroCalendario(nombreUsuario,dia,registro);
 			break;
 		}
 	}
@@ -248,11 +276,12 @@ public class Manager {
 				break;
 			case 2:
 				dbMongo.nuevoRegistroCalendario(nombreUsuario,dia,registro);
-
 				break;
 			case 3:
+				dbMysql.nuevoRegistroCalendario(nombreUsuario,dia,registro);
 				break;
 			case 4:
+				hibernate.nuevoRegistroCalendario(nombreUsuario,dia,registro);
 				break;
 		}
 	}
@@ -272,11 +301,12 @@ public class Manager {
 				break;
 			case 2:
 				series=dbMongo.getRecomendacionesAmigos(nombreUsuario);
-
 				break;
 			case 3:
+				series=dbMysql.getRecomendacionesAmigos(nombreUsuario);
 				break;
 			case 4:
+				series=hibernate.getRecomendacionesAmigos(nombreUsuario);
 				break;
 		}
 		return series;

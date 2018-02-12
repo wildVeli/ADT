@@ -1,0 +1,217 @@
+-- phpMyAdmin SQL Dump
+-- version 4.2.7.1
+-- http://www.phpmyadmin.net
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generaciÃ³n: 09-01-2018 a las 14:05:37
+-- VersiÃ³n del servidor: 5.5.39
+-- VersiÃ³n de PHP: 5.4.31
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Base de datos: `XE`
+--
+DROP DATABASE `XE`;
+CREATE DATABASE IF NOT EXISTS `XE` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `XE`;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `amigos`
+--
+-- CreaciÃ³n: 09-01-2018 a las 12:30:32
+--
+
+DROP TABLE IF EXISTS `amigos`;
+CREATE TABLE IF NOT EXISTS `amigos` (
+  `id` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `amigo` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `calendarios`
+--
+-- CreaciÃ³n: 09-01-2018 a las 12:36:46
+--
+
+DROP TABLE IF EXISTS `calendarios`;
+CREATE TABLE IF NOT EXISTS `calendarios` (
+  `id` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `dia` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `serie` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `libros`
+--
+-- CreaciÃ³n: 09-01-2018 a las 12:52:08
+--
+
+DROP TABLE IF EXISTS `libros`;
+CREATE TABLE IF NOT EXISTS `libros` (
+  `propietario` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `genero` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `recomendado` int(1) NOT NULL,
+  `puntuacion` int(2) NOT NULL,
+  `autor` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `musica`
+--
+-- CreaciÃ³n: 09-01-2018 a las 12:49:02
+--
+
+DROP TABLE IF EXISTS `musica`;
+CREATE TABLE IF NOT EXISTS `musica` (
+  `propietario` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `genero` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `recomendado` int(1) NOT NULL,
+  `puntuacion` int(2) NOT NULL,
+  `tipo` varchar(8) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `cantante` varchar(50) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `peliculas`
+--
+-- CreaciÃ³n: 09-01-2018 a las 12:55:05
+--
+
+DROP TABLE IF EXISTS `peliculas`;
+CREATE TABLE IF NOT EXISTS `peliculas` (
+  `propietario` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `genero` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `recomendado` int(1) NOT NULL,
+  `puntuacion` int(2) NOT NULL,
+  `director` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `series`
+--
+-- CreaciÃ³n: 09-01-2018 a las 12:41:04
+--
+
+DROP TABLE IF EXISTS `series`;
+CREATE TABLE IF NOT EXISTS `series` (
+  `propietario` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `nombre` varchar(100) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `genero` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `recomendado` int(1) NOT NULL,
+  `puntuacion` int(2) NOT NULL,
+  `temporadas` int(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+-- CreaciÃ³n: 09-01-2018 a las 12:28:16
+--
+
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `id` varchar(30) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
+  `password` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Ã�ndices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `calendarios`
+--
+ALTER TABLE `calendarios`
+ ADD PRIMARY KEY (`id`,`dia`,`serie`);
+
+--
+-- Indices de la tabla `libros`
+--
+ALTER TABLE `libros`
+ ADD PRIMARY KEY (`propietario`,`nombre`,`autor`);
+
+--
+-- Indices de la tabla `musica`
+--
+ALTER TABLE `musica`
+ ADD PRIMARY KEY (`propietario`,`nombre`,`cantante`);
+
+--
+-- Indices de la tabla `peliculas`
+--
+ALTER TABLE `peliculas`
+ ADD PRIMARY KEY (`propietario`,`nombre`,`director`);
+
+--
+-- Indices de la tabla `series`
+--
+ALTER TABLE `series`
+ ADD PRIMARY KEY (`propietario`,`nombre`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+ ADD PRIMARY KEY (`id`);
+ 
+ 
+ 
+--------------------------------------------------------Consultas
+
+--Comprobar usuario
+SELECT count(*) FROM usuarios WHERE lower(id) like ? and lower(passsword) like ?;
+
+--Registrar usuario
+INSERT INTO usuarios values (?,?);
+
+--Get contenido de un tipo
+SELECT * FROM series WHERE lower(propietario) like ?
+SELECT * FROM libros WHERE lower(propietario) like ?
+SELECT * FROM peliculas WHERE lower(propietario) like ?
+SELECT * FROM musica WHERE lower(propietario) like ?
+
+--Borrar contenido seleccionado
+DELETE FROM series WHERE lower(propietario) like ? and lower(nombre) like ?;
+DELETE FROM libros WHERE lower(propietario) like ? and lower(nombre) like ?;
+DELETE FROM peliculas WHERE lower(propietario) like ? and lower(nombre) like ?;
+DELETE FROM musica WHERE lower(propietario) like ? and lower(nombre) like ?;
+
+--Recomendar contenido seleccionado
+UPDATE series set recomendado = 1 where lower(propietario) like ? and lower(nombre) like ?;
+UPDATE libros set recomendado = 1 where lower(propietario) like ? and lower(nombre) like ?;
+UPDATE peliculas set recomendado = 1 where lower(propietario) like ? and lower(nombre) like ?;
+UPDATE musica set recomendado = 1 where lower(propietario) like ? and lower(nombre) like ?;
+
+--AÃ±adir nuevo contenido
+INSERT INTO series values (?,?,?,?,?,?);
+INSERT INTO libros values (?,?,?,?,?,?);
+INSERT INTO peliculas values (?,?,?,?,?,?);
+INSERT INTO musica values (?,?,?,?,?,?,?);
+
+--Modificar contenido
+
+--Get calendarios
+SELECT * from calendarios where lower(id) like ? order by dia;
+--Borrar contenido calendarios
+DELETE FROM calendarios where lower(id) like ? and lower(dia) like ? and lower(serie) like ?;
+--Nuevo registro calendarios
+insert into calendarios values (?,?,?);

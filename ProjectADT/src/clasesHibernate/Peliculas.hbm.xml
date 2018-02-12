@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 09-feb-2018 19:51:00 by Hibernate Tools 5.2.8.Final -->
+<hibernate-mapping>
+ <class catalog="XE" name="clasesHibernate.Peliculas" table="peliculas">
+  <composite-id class="clasesHibernate.PeliculasId" mapped="false"
+   name="id" unsaved-value="undefined">
+   <key-property name="propietario" type="string">
+    <column length="30" name="propietario"/>
+   </key-property>
+   <key-property name="nombre" type="string">
+    <column length="100" name="nombre"/>
+   </key-property>
+  </composite-id>
+  <property generated="never" lazy="false" name="genero" type="string">
+   <column length="30" name="genero" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="recomendado" type="int">
+   <column name="recomendado" not-null="true"/>
+  </property>
+  <property generated="never" lazy="false" name="puntuacion" type="int">
+   <column name="puntuacion" not-null="true"/>
+  </property>
+  <property name="director" type="string">
+   <column length="30" name="director"/>
+  </property>
+ </class>
+</hibernate-mapping>

@@ -93,14 +93,14 @@ public class JPanelLogin extends JPanel {
 		add(rdbtnMongodb);
 		rdbtnMongodb.addActionListener(radioGroupListener);
 		
-		rdbtnDbrelacional = new JRadioButton("DBRelacional");
+		rdbtnDbrelacional = new JRadioButton("MySQL");
 		rdbtnDbrelacional.setForeground(Color.BLACK);
 		rdbtnDbrelacional.setBackground(Color.LIGHT_GRAY);
 		rdbtnDbrelacional.setBounds(765, 689, 123, 23);
 		add(rdbtnDbrelacional);
 		rdbtnDbrelacional.addActionListener(radioGroupListener);
 		
-		radioButton_2 = new JRadioButton("");
+		radioButton_2 = new JRadioButton("Hibernate");
 		radioButton_2.setForeground(Color.BLACK);
 		radioButton_2.setBackground(Color.LIGHT_GRAY);
 		radioButton_2.setBounds(890, 689, 123, 23);
@@ -158,13 +158,16 @@ public class JPanelLogin extends JPanel {
 				}else {
 					//SI ACCEDE A LA BASE DE DATOS
 					if(manager.validarUsuario(usuarioLogin.getText(),passwordLogin.getText(),"login",JFramePrincipal.getTipo())) {
+
+						
 						((JFramePrincipal) principal).getjPanelCalendario().setVisible(true);
 						((JFramePrincipal) principal).getjPanelListado().setVisible(false);
 						((JFramePrincipal) principal).getjPanelMenu().setVisible(true);
 						((JFramePrincipal) principal).getjPanelRecomendaciones().setVisible(false);
 						((JFramePrincipal) principal).getjPanelTopBar().setVisible(true);
 						((JFramePrincipal) principal).getjPanelLogin().setVisible(false);
-							JFramePrincipal.setUsuarioConectado(usuarioLogin.getText());
+						JFramePrincipal.setUsuarioConectado(usuarioLogin.getText());
+						((JFramePrincipal) principal).getjPanelCalendario().cargarDatosEnModelo();
 					//SI NO ACCEDE
 					}else {
 						JOptionPane.showMessageDialog(principal, "Usuario o Contraseña incorrectos");

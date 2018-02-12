@@ -17,6 +17,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
@@ -30,6 +32,13 @@ public class JPanelCalendario extends JPanel {
 	private JButton btnBorrarSeleccionado;
 	private Color colorTablasFondo =new Color(219, 219, 219);
 	private Manager manager=new Manager();
+	private JTable tablaLunes;
+	private JTable tablaMartes;
+	private JTable tablaMiercoles;
+	private JTable tablaJueves;
+	private JTable tablaViernes;
+	private JTable tablaSabado;
+	private JTable tablaDomingo;
 
 	/**
 	 * Crea el panel de calendario
@@ -42,6 +51,7 @@ public class JPanelCalendario extends JPanel {
 		botones();
 		creacionLabels();
 		crearTablas();
+		//cargarDatosEnModelo();
 	}
 
 	/**
@@ -54,6 +64,9 @@ public class JPanelCalendario extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				JDialogNuevoCalendario nuevoRegistro= new JDialogNuevoCalendario("añadir");
 				nuevoRegistro.setVisible(true);
+				System.out.println("siso");
+				cargarDatosEnModelo();
+				
 			}
 		});
 		btnAadirRegistro.setBounds(231, 39, 133, 23);
@@ -65,6 +78,7 @@ public class JPanelCalendario extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				JDialogNuevoCalendario nuevoRegistro= new JDialogNuevoCalendario("borrar");
 				nuevoRegistro.setVisible(true);
+				cargarDatosEnModelo();
 			}
 		});
 		btnBorrarSeleccionado.setBounds(403, 39, 151, 23);
@@ -72,246 +86,121 @@ public class JPanelCalendario extends JPanel {
 		
 	}
 
+	public void cargarDatosEnModelo() {
+		DefaultTableModel tableModel = new DefaultTableModel();
+		
+		Vector<String> row = new Vector<String>();
+		ArrayList<Calendario> calendarios = new  ArrayList<Calendario>();
+		calendarios = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), JFramePrincipal.getTipo());
+		System.out.println("interfaz"+calendarios.size());
+		int numDia=0;
+		tableModel.addColumn("Series");
+		for (Calendario calendario : calendarios) {
+
+			
+			System.out.println("dentro "+calendario.getDia());
+			System.out.println("tamanio series: "+calendario.getSeries().size());
+			for(Serie serie :calendario.getSeries()) {
+				System.out.println(serie.getNombre().toString());
+				row.add(serie.getNombre());
+				tableModel.addRow(row);
+				System.out.println("row count "+tableModel.getRowCount());
+				row = new Vector <String>();
+			}
+			asignarModelosConDatos(tableModel,calendario.getDia());		
+			tableModel = new DefaultTableModel();
+			tableModel.addColumn("Series");
+
+		}
+		
+	}
+
 	/**
-	 * Crea las distintas tablas que se usarán para cada día de la semana
+	 * Crea las tablas cuando se inicia la ventana
 	 */
 	private void crearTablas() {
-		
-		/*
-		tablaLunes();
-		
-		tablaMartes();
-		tablaMiercoles();
-		tablaJueves();
-		tablaViernes();
-		tablaSabado();
-		tablaDomingo();
-		*/
-		
-		
-	}
-	/*
-	private void tablaLunes() {
-
-		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-		
-			ArrayList<Calendario> x=new ArrayList<Calendario> ();
-			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 1, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x.get(1).getSeries();
-			Object[][] rowData = {{"House","juan"}};
-			String[] columnNames = {"Nombre"};
-			//FIN RECOGIDA
-				
-			DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames);
-			JTable tablaLunes= new JTable(tableModel);
-			for (int i = 0; i < series.size(); i++) {
-				String nombre=series.get(i).getNombre().toString();
-				Object[] data = {nombre};
-				tableModel.addRow(data);
-			}
-				
+			tablaLunes= new JTable();
 			JScrollPane scrollTablaLunes = new JScrollPane(tablaLunes);
-			scrollTablaLunes.setBorder(BorderFactory.createEmptyBorder());
-			scrollTablaLunes.setBounds(25, 90, 190, 155);
-			tablaLunes.setFillsViewportHeight(true);
-			add(scrollTablaLunes);
-			tablaLunes.setEnabled(false);
-			//tablaLunes.setFocusable(true);
-			//tablaLunes.setRowSelectionAllowed(true);
+			parametrosTabla(tablaLunes,scrollTablaLunes,25,90,190,155);	
 			
-			
-			tablaLunes.setBackground(colorTablasFondo);
-			tablaLunes.setShowGrid(false);
-			tablaLunes.setRowHeight(20);
-			tablaLunes.setTableHeader(null);
-		
-
-
-	
-}
-
-	private void tablaMartes() {
-		
-		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			ArrayList<Calendario> x=new Calendario[1];
-			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 2, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x[1].getSeries();
-			String[] columnNames = {"Nombre"};
-
-			DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-			JTable tablaMartes= new JTable(tableModel);
-			for (int i = 0; i < series.size(); i++) {
-				String nombre=series.get(i).getNombre().toString();
-				Object[] data = {nombre};
-				tableModel.addRow(data);
-			}
-			//FIN RECOGIDA
-
-				
+			tablaMartes= new JTable();
 			JScrollPane scrollTablaMartes = new JScrollPane(tablaMartes);
-			scrollTablaMartes.setBorder(BorderFactory.createEmptyBorder());
-			scrollTablaMartes.setBounds(283, 90, 190, 155);
-			tablaMartes.setFillsViewportHeight(true);
-			add(scrollTablaMartes);
-			tablaMartes.setBackground(colorTablasFondo);
-			tablaMartes.setShowGrid(false);
-			tablaMartes.setRowHeight(20);
-			tablaMartes.setTableHeader(null);
-			tablaMartes.setEnabled(false);
+			parametrosTabla(tablaMartes,scrollTablaMartes,283, 90, 190, 155);
 
-		
-	}
-
-	private void tablaMiercoles() {
-		
-		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			Calendario[] x=new Calendario[1];
-			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 3, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x[1].getSeries();
-			String[] columnNames = {"Nombre"};
-				
-			DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-			JTable tablaMiercoles= new JTable(tableModel);
-			for (int i = 0; i < series.size(); i++) {
-				String nombre=series.get(i).getNombre().toString();
-				Object[] data = {nombre};
-				tableModel.addRow(data);
-			}
-		//FIN RECOGIDA
-			
+			tablaMiercoles= new JTable();
 			JScrollPane scrollTablaMiercoles = new JScrollPane(tablaMiercoles);
-			scrollTablaMiercoles.setBorder(BorderFactory.createEmptyBorder());
-			scrollTablaMiercoles.setBounds(530, 90, 190, 155);
-			tablaMiercoles.setFillsViewportHeight(true);
-			add(scrollTablaMiercoles);
-			tablaMiercoles.setBackground(colorTablasFondo);
-			tablaMiercoles.setShowGrid(false);
-			tablaMiercoles.setRowHeight(20);
-			tablaMiercoles.setTableHeader(null);
-			tablaMiercoles.setEnabled(false);
-	}
+			parametrosTabla(tablaMiercoles,scrollTablaMiercoles,530, 90, 190, 155);	
 
-	private void tablaJueves() {
-		
-		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			Calendario[] x=new Calendario[1];
-			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 4, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x[1].getSeries();
-			String[] columnNames = {"Nombre"};
-				
-			DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-			JTable tablaJueves= new JTable(tableModel);
-			for (int i = 0; i < series.size(); i++) {
-				String nombre=series.get(i).getNombre().toString();
-				Object[] data = {nombre};
-				tableModel.addRow(data);
-			}
-		//FIN RECOGIDA
-			
+			tablaJueves= new JTable();
 			JScrollPane scrollTablaJueves = new JScrollPane(tablaJueves);
-			scrollTablaJueves.setBorder(BorderFactory.createEmptyBorder());
-			scrollTablaJueves.setBounds(142, 284, 190, 180);
-			tablaJueves.setFillsViewportHeight(true);
-			add(scrollTablaJueves);
-			tablaJueves.setBackground(colorTablasFondo);
-			tablaJueves.setShowGrid(false);
-			tablaJueves.setRowHeight(20);
-			tablaJueves.setTableHeader(null);
-			tablaJueves.setEnabled(false);
-		
-	}
+			parametrosTabla(tablaJueves,scrollTablaJueves,142, 284, 190, 180);	
 
-	private void tablaViernes() {
-		
-		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			Calendario[] x=new Calendario[1];
-			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 5, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x[1].getSeries();
-			String[] columnNames = {"Nombre"};
-				
-			DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-			JTable tablaViernes= new JTable(tableModel);
-			for (int i = 0; i < series.size(); i++) {
-				String nombre=series.get(i).getNombre().toString();
-				Object[] data = {nombre};
-				tableModel.addRow(data);
-			}
-		//FIN RECOGIDA
-			
-			JScrollPane scrollTablaViernes = new JScrollPane(tablaViernes);
-			scrollTablaViernes.setBorder(BorderFactory.createEmptyBorder());
-			scrollTablaViernes.setBounds(403, 284, 190, 180);
-			tablaViernes.setFillsViewportHeight(true);
-			add(scrollTablaViernes);
-			tablaViernes.setBackground(colorTablasFondo);
-			tablaViernes.setShowGrid(false);
-			tablaViernes.setRowHeight(20);
-			tablaViernes.setTableHeader(null);
-			tablaViernes.setEnabled(false);
-	}
+			tablaViernes= new JTable();
+			JScrollPane scrolltablaViernes = new JScrollPane(tablaViernes);
+			parametrosTabla(tablaViernes,scrolltablaViernes,403, 284, 190, 180);	
 
-	private void tablaSabado() {
-		
-		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			Calendario[] x=new Calendario[1];
-			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 6, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x[1].getSeries();
-			String[] columnNames = {"Nombre"};
-				
-			DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-			JTable tablaSabado= new JTable(tableModel);
-			for (int i = 0; i < series.size(); i++) {
-				String nombre=series.get(i).getNombre().toString();
-				Object[] data = {nombre};
-				tableModel.addRow(data);
-			}
-		//FIN RECOGIDA
-			
+			tablaSabado= new JTable();
 			JScrollPane scrollTablaSabado = new JScrollPane(tablaSabado);
-			scrollTablaSabado.setBorder(BorderFactory.createEmptyBorder());
-			scrollTablaSabado.setBounds(142, 510, 190, 190);
-			tablaSabado.setFillsViewportHeight(true);
-			add(scrollTablaSabado);
-			tablaSabado.setBackground(colorTablasFondo);
-			tablaSabado.setShowGrid(false);
-			tablaSabado.setRowHeight(20);
-			tablaSabado.setTableHeader(null);
-			tablaSabado.setEnabled(false);
-	}
+			parametrosTabla(tablaSabado,scrollTablaSabado,142, 510, 190, 190);	
 
-	private void tablaDomingo() {
-		
-		//AQUÍ SE RECOGEN DATOS DE LA BASE DE DATOS Y SE PLASMAN EN LA TABLA
-			Calendario[] x=new Calendario[1];
-			x = manager.getCalendarios(JFramePrincipal.getUsuarioConectado(), (short) 7, JFramePrincipal.getTipo());
-			ArrayList <Serie> series=x[1].getSeries();
-			String[] columnNames = {"Nombre"};
-				
-			DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
-			JTable tablaDomingo= new JTable(tableModel);
-			for (int i = 0; i < series.size(); i++) {
-				String nombre=series.get(i).getNombre().toString();
-				Object[] data = {nombre};
-				tableModel.addRow(data);
-			}
-		//FIN RECOGIDA
-			
+			tablaDomingo= new JTable();
 			JScrollPane scrollTablaDomingo = new JScrollPane(tablaDomingo);
-			scrollTablaDomingo.setBorder(BorderFactory.createEmptyBorder());
-			scrollTablaDomingo.setBounds(403, 510, 190, 190);
-			tablaDomingo.setFillsViewportHeight(true);
-			add(scrollTablaDomingo);
-			tablaDomingo.setBackground(colorTablasFondo);
-			tablaDomingo.setShowGrid(false);
-			tablaDomingo.setRowHeight(20);
-			tablaDomingo.setTableHeader(null);
-			tablaDomingo.setEnabled(false);
-			
+			parametrosTabla(tablaDomingo,scrollTablaDomingo,403, 510, 190, 190);
+			cargarDatosEnModelo();
+	}
+	
+	private void asignarModelosConDatos(DefaultTableModel tableModel, String dia) {
+		dia = dia.toLowerCase();
+		switch(dia) {
+		case "lunes":
+			tablaLunes.setModel(tableModel);
+			break;
+		case "martes":
+			tablaMartes.setModel(tableModel);
+			break;
+		case "miércoles":
+			tablaMiercoles.setModel(tableModel);
+			break;
+		case "jueves":
+			tablaJueves.setModel(tableModel);
+			break;
+		case "viernes":
+			tablaViernes.setModel(tableModel);
+			break;
+		case "sábado":
+			tablaSabado.setModel(tableModel);
+			break;
+		case "domingo":
+			tablaDomingo.setModel(tableModel);
+			break;
+		}
+		
+		
+	}
 
+	private void parametrosTabla(JTable tabla, JScrollPane scroll, int x, int y, int alto, int ancho) {
+
+		scroll.setBorder(BorderFactory.createEmptyBorder());
+		scroll.setBounds(x,y,alto,ancho);
+		tabla.setFillsViewportHeight(true);
+		add(scroll);
+		tabla.setFillsViewportHeight(true);
+		
+		tabla.setEnabled(false);
+		//tablaLunes.setFocusable(true);
+		//tablaLunes.setRowSelectionAllowed(true);
+	//	tablaLunes.setBackground(colorTablasFondo);
+		tabla.setShowGrid(false);
+		tabla.setRowHeight(20);
+		//tabla.setTableHeader(null);
+		
+		this.repaint();
+		this.validate();
+	
 	}
 
 
-*/
+
 	/**
 	 * Crea los labels que contendrán los nombres de los dias y los posiciona en el panel
 	 */
@@ -363,5 +252,13 @@ public class JPanelCalendario extends JPanel {
 		lblDomingo.setBounds(403, 485, 190, 14);
 		add(lblDomingo);
 		
+	}
+
+	public Color getColorTablasFondo() {
+		return colorTablasFondo;
+	}
+
+	public void setColorTablasFondo(Color colorTablasFondo) {
+		this.colorTablasFondo = colorTablasFondo;
 	}
 }

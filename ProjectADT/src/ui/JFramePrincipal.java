@@ -117,7 +117,7 @@ public class JFramePrincipal extends JFrame {
 		jPanelLogin=new JPanelLogin(this);
 		jPanelLogin.setBounds(0,0, 1024, 768);
 		fondo.add(jPanelLogin);
-		jPanelLogin.setVisible(true);;
+		jPanelLogin.setVisible(true);
 		
 		jPanelListado=new JPanelListado();		
 		jPanelListado.setBounds(269, 39, 755, 729);

@@ -53,7 +53,6 @@ public class DBmongo {
 	}
 
 	public void registrarUsuario(String nombreUsuario, String password) {
-		// db.usuarios.insert({_id:"juan",password:"1234",amigos:["Pedro","Isma"],series:['ser1','ser2'],musica:['mus1','mus2'],libros:['libro1','libro2'],peliculas:['peli1','peli2']})
 		MongoClient mongoClient = new MongoClient();
 		DB database = mongoClient.getDB("contenidos");
 		DBCollection collection = database.getCollection("usuarios");
@@ -97,14 +96,12 @@ public class DBmongo {
 		}
 		return collec;
 	}
-	public ArrayList<Contenido> getContenidoDeUnTipo(String nombreUsuario, String tipoContenido) {
+	//probar
+	public ArrayList<Object> getContenidoDeUnTipo(String nombreUsuario, String tipoContenido) {
 		
-		Serie serie;
-		Pelicula peli;
-		Musica musica;
-		Libro libro;
-		Contenido contenido = new Contenido();
-		ArrayList<Contenido> contenidos = new ArrayList<Contenido>();
+		
+		Contenido contenido = new Serie();
+		ArrayList<Object> contenidos = new ArrayList<Object>();
 		MongoClient mongoClient = new MongoClient();
 		DB database = mongoClient.getDB("contenidos");
 		String collec = comprobarTipo(tipoContenido);
@@ -114,36 +111,42 @@ public class DBmongo {
 
 		
 		while(cursor.hasNext()) {
+			
 			BasicDBObject obj = (BasicDBObject) cursor.next();
-			contenido.setNombre(cursor.curr().get("nombre").toString());
-			contenido.setGenero(cursor.curr().get("genero").toString());
-			contenido.setRecomendado((boolean)cursor.curr().get("recomendado"));
-			contenido.setPuntucacion(Short.valueOf(cursor.curr().get("puntuacion").toString()));
-			//System.out.println(str);
+
+			//El formato que devuelve en un ejemplo de "3" en la base de datos es "3.0" con lo cual al parsearlo falla, por eso al guardarlo a mano se guarda como string
+			
+			
 			switch (tipoContenido) {
 			
 			case "Serie":
-				serie= (Serie) contenido;
-				serie.setTemporadas(Integer.valueOf(cursor.curr().get("temporadas").toString()));
-				contenidos.add(serie);
+				contenido = new Serie();
+				System.out.println((cursor.curr().get("temporadas").toString()));
+				((Serie)contenido).setTemporadas(Integer.valueOf(cursor.curr().get("temporadas").toString()));
+				
 				break;
 			case "Película":
-				peli= (Pelicula) contenido;
-				peli.setDirector(cursor.curr().get("director").toString());
-				contenidos.add(peli);
+				contenido = new Pelicula();
+				((Pelicula)contenido).setDirector(cursor.curr().get("director").toString());
 				break;
 			case "Música":
-				musica= (Musica) contenido;
-				musica.setCantante(cursor.curr().get("cantante").toString());
-				musica.setTipo(cursor.curr().get("tipo").toString());
-				contenidos.add(musica);
+				contenido = new Musica();
+				((Musica)contenido).setCantante(cursor.curr().get("cantante").toString());
+				((Musica)contenido).setTipo(cursor.curr().get("tipo").toString());
 				break;
 			case "Libro":
-				libro= (Libro) contenido;
-				libro.setAutor(cursor.curr().get("autor").toString());
-				contenidos.add(libro);
+				contenido = new Libro();
+				((Libro)contenido).setAutor(cursor.curr().get("autor").toString());
 				break;
 			}
+			contenido.setPuntucacion(Short.valueOf(cursor.curr().get("puntuacion").toString()));
+			contenido.setNombre(obj.get("nombre").toString());
+			contenido.setGenero(obj.get("genero").toString());
+			contenido.setRecomendado((boolean)obj.get("recomendado"));
+			System.out.println(cursor.curr().get("temporadas"));
+			contenidos.add(contenido);
+			
+
 			
 		}
 		
@@ -259,8 +262,8 @@ public class DBmongo {
 		mongoClient.close();
 		
 	}
-
-	public ArrayList<Calendario> getCalendarios(String nombreUsuario, short numCalendario) {
+//Probar
+	public ArrayList<Calendario> getCalendarios(String nombreUsuario) {
 		Serie serie=new Serie();
 		ArrayList<Serie> series=new ArrayList<Serie>();
 		
@@ -270,35 +273,48 @@ public class DBmongo {
 		DB database = mongoClient.getDB("contenidos");
 		DBCollection collection = database.getCollection("calendarios");
 		DBCursor cursor = collection.find(new BasicDBObject("propietario",nombreUsuario));	
-
 		
 		while(cursor.hasNext()) {
-			String anteriorCalendario="lunes";
-			BasicDBObject obj = (BasicDBObject) cursor.next();
-			serie.setNombre(cursor.curr().get("nombre").toString());
-			serie.setGenero(cursor.curr().get("genero").toString());
-			serie.setRecomendado((boolean)cursor.curr().get("recomendado"));
-			serie.setPuntucacion(Short.valueOf(cursor.curr().get("puntuacion").toString()));
-			serie.setTemporadas(Integer.valueOf(cursor.curr().get("temporadas").toString()));
-			String actualCalendario=cursor.curr().get("dia").toString();
 			
-			if(anteriorCalendario.equals(actualCalendario)) {
-				series.add(serie);
-			}else {
-				calendario.setSeries(series);
-				calendario.setDia(anteriorCalendario);
-				series.clear();
-				series.add(serie);
-				calendarios.add(calendario);
+			BasicDBObject obj = (BasicDBObject) cursor.next();
+			calendario.setDia(cursor.curr().get("dia").toString());		
+			System.out.println(cursor.curr().get("dia").toString());
+			System.out.println(cursor.curr().get("series"));
+
+			
+			String sSeries=  cursor.curr().get("series").toString();
+			String serieNueva="";
+			for(int i=0 ;i<sSeries.length();i++) {
+				
+				
+				if(Character.isAlphabetic(sSeries.charAt(i))) {
+					serieNueva=serieNueva+sSeries.charAt(i);
+				}else if(!serieNueva.equals("")) {
+					
+					serie.setNombre(serieNueva);
+					System.out.println("serie añadida :"+serieNueva);
+					series.add(serie);
+					serie= new Serie();
+					serieNueva="";
+				}
+
 			}
-			anteriorCalendario=actualCalendario;
+			System.out.println("series antes de añadir a calendario "+series.size());
+			calendario.setSeries(series);
+			System.out.println("despues de añadir a calendario"+calendario.getSeries().size());
+			series = new ArrayList<Serie>();
+			calendarios.add(calendario);
+			calendario = new Calendario();
 		}
-		
+		System.out.println("calendarios 1" +calendarios.size());
+		System.out.println("series calendarios dbmongo "+calendarios.get(1).getSeries().size());
 		cursor.close();
-		
+		System.out.println("calendarios antes" +calendarios.size());
 		mongoClient.close();
 		
-		System.out.println(calendarios.size());
+		System.out.println("calendarios" +calendarios.size());
+		
+		System.out.println("FIN CONSULTA MONGO");
 		return calendarios;
 	}
 
@@ -308,7 +324,7 @@ public class DBmongo {
 		DBCollection collection = database.getCollection("calendarios");
 		
 		BasicDBObject query = new BasicDBObject("propietario",nombreUsuario).append("dia", dia);
-		BasicDBObject update = new BasicDBObject("series","prueba1");
+		BasicDBObject update = new BasicDBObject("series",registro);
 		
 		collection.update(query, new BasicDBObject("$pull", update));
 		mongoClient.close();
