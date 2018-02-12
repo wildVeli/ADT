@@ -196,7 +196,7 @@ public class Manager {
 	public void modificarContenido (String nombreUsuario,Contenido contenido,String tipoContenido,short tipo) {
 		switch(tipo){
 		case 1:
-			dbManager.modificarContenido(nombreUsuario,contenido);
+			dbManager.modificarContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 2:
 			dbMongo.modificarContenido(nombreUsuario,contenido, tipoContenido);

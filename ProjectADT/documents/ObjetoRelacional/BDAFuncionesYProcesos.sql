@@ -81,16 +81,15 @@ NESTED table musicaAni store as musicas_anidada,
 NESTED table librosAni store as libros_anidada,
 NESTED table peliculasAni store as peliculas_anidada;
 /
-create type  tipoCalendarios as object(
-	usu ref tipoUsuarios,
-	dia varchar2(9),
-	serie tabla_anidadaSeries
+create or replace type  tipoCalendarios as object(
+	usu varchar2(40),
+	dia varchar2(10),
+	serie varchar2(40)
 );
 / 
-
-create table  calendarios of tipoCalendarios(
-	--primary key (usu,dia)
-)NESTED TABLE serie STORE AS serie_anidada;
+--();
+--NESTED TABLE serie STORE AS serie_anidada;
+create table calendarios of tipoCalendarios;
 / 
 
 /*---------------------FUNCIONES Y PROCESOS*----------------------------------*/
@@ -152,7 +151,16 @@ end;
 DELETE from table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido where lower(contenido.nombre) like lower('"+nombreContenido+"');
 --getContenidoDeUnTipo
 select a.* from usuarios u, table("+tipo+") a where lower(u.id) like lower('"+nombreUsuario+"');
+select a.* from usuarios u, table(seriesAni) a where lower(u.id) like lower('juan');
 
 --recomendarContenidoSeleccionado
  UPDATE table (select musicaAni from usuarios where lower(id) like lower('juan')) contenido set contenido.recomendado = 0 where lower(contenido.nombre) like lower('chocolate') ;
- 
+--modificar contenido
+UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido set "
+						+ "contenido.genero = ?"
+						+ ",contenido.recomendado = ? "
+						+ ",contenido.puntuacion = ? "
+						+ ",contenido.temporadas = ? "
+						+ "where lower(contenido.nombre) like lower('"+serie.getNombre()+"');
+--anadirNuevoContenido
+insert into TABLE (SELECT seriesAni from usuarios where lower(id) like lower('juan')) values(tabla_anidadaSeries(tipoSeries('house','fantasia',1,8,4)));
