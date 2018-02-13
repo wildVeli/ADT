@@ -36,7 +36,6 @@ public class Manager {
 	 * @param tipo que base de datos se utilizará
 	 * @param tipoAccion puede ser "registro" comprueba si existe el nombre de usuario o "login" comprueba si existe el nombre y contraseña del usuario
 	 * @return devuelve si existe en la base de datos
-	 * @throws IOException 
 	 */
 	public boolean validarUsuario(String nombreUsuario,String password,String tipoAccion,short tipo)  {
 		boolean existe=true;
@@ -53,9 +52,7 @@ public class Manager {
 				existe = dbMysql.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 			case 4:
-				if(hibernate == null) {
-					hibernate = new Hibernate();
-				}
+				hibernateCreate();
 				existe = hibernate.validarUsuario(nombreUsuario,password,tipoAccion);
 				break;
 		}
@@ -66,7 +63,6 @@ public class Manager {
 	 * @param nombreUsuario Nombre del usuario
 	 * @param password Contraseña del usuario
 	 * @param tipo que base de datos se utilizará
-	 * @throws IOException 
 	 */
 	public void registrarUsuario(String nombreUsuario,String password,short tipo)  {
 		switch(tipo){
@@ -80,14 +76,20 @@ public class Manager {
 				dbMysql.registrarUsuario(nombreUsuario, password);
 				break;
 			case 4:
-				if(hibernate == null) {
-					hibernate = new Hibernate();
-				}
+				hibernateCreate();
 				hibernate.registrarUsuario(nombreUsuario, password);
 				break;
 		}
 	}
-	
+	/**
+	 * Hace un new de Hibernate
+	 */
+	private void hibernateCreate() {
+		if(hibernate == null) {
+			hibernate = new Hibernate();
+		}
+		
+	}
 	//CONTENIDOS-------------------------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Método que llama al método getContenidoDeUnTipo del Manager correspondiente
@@ -95,7 +97,6 @@ public class Manager {
 	 * @param tipoContenido por que tipo de contenido se filtra
 	 * @param tipo que base de datos se utiliza
 	 * @return devuelve una lista del contenido del usuario de dicho tipo
-	 * @throws IOException 
 	 */
 	public ArrayList<Object> getContenidoDeUnTipo (String nombreUsuario,String tipoContenido,short tipo) {
 		ArrayList<Object> contenido = null;
@@ -110,6 +111,7 @@ public class Manager {
 				contenido=dbMysql.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 			case 4:
+				hibernateCreate();
 				contenido=hibernate.getContenidoDeUnTipo(nombreUsuario,tipoContenido);
 				break;
 		}
@@ -120,7 +122,7 @@ public class Manager {
 	 * @param nombreUsuario nombre del usuario que hace la eliminación
 	 * @param nombreContenido nombre del contenido que se borrará
 	 * @param tipo que base de datos se utiliza
-	 * @throws IOException 
+	 * @param tipoContenido especifica que tipo de contenido es(series,películas,música o libros)
 	 */
 	public void borrarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo){
 		switch(tipo){
@@ -134,6 +136,7 @@ public class Manager {
 			dbMysql.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 4:
+			hibernateCreate();
 			hibernate.borrarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		}
@@ -143,7 +146,7 @@ public class Manager {
 	 * @param nombreUsuario nombre del usuario que hace la recomendación
 	 * @param nombreContenido nombre del contenido que se recomendará
 	 * @param tipo que base de datos se utiliza
-	 * @throws IOException 
+	 * @param tipoContenido especifica que tipo de contenido es(series,películas,música o libros)
 	 */
 	public void recomendarContenidoSeleccionado (String nombreUsuario,String nombreContenido,String tipoContenido,short tipo) {
 		switch(tipo){
@@ -157,6 +160,7 @@ public class Manager {
 			dbMysql.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		case 4:
+			hibernateCreate();
 			hibernate.recomendarContenidoSeleccionado(nombreUsuario,nombreContenido, tipoContenido);
 			break;
 		}
@@ -167,7 +171,6 @@ public class Manager {
 	 * @param contenido contenido que se añadira a la lista del usuario
  		@param tipoContenido tipo de contenido que se va a guardar, puede contener los valores "Serie", "Película", "Música", "Libro"
 	 * @param tipo que base de datos se utiliza
-	 * @throws IOException 
 	 */
 	public void anadirNuevoContenido (String nombreUsuario,Contenido contenido,String tipoContenido,short tipo) {
 		switch(tipo){
@@ -181,6 +184,7 @@ public class Manager {
 			dbMysql.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		case 4:
+			hibernateCreate();
 			hibernate.anadirNuevoContenido(nombreUsuario,contenido,tipoContenido);
 			break;
 		}
@@ -191,7 +195,6 @@ public class Manager {
 	 * @param contenido contenido modificado para sustituir al viejo
 	 * @param tipoContenido tipo de contenido que se va a guardar, puede contener los valores "Serie", "Película", "Música", "Libro"
 	 * @param tipo que base de datos se utiliza
-	 * @throws IOException 
 	 */
 	public void modificarContenido (String nombreUsuario,Contenido contenido,String tipoContenido,short tipo) {
 		switch(tipo){
@@ -205,6 +208,7 @@ public class Manager {
 			dbMysql.modificarContenido(nombreUsuario,contenido, tipoContenido);
 			break;
 		case 4:
+			hibernateCreate();
 			hibernate.modificarContenido(nombreUsuario,contenido, tipoContenido);
 			break;
 		}
@@ -214,10 +218,8 @@ public class Manager {
 	/**
 	 * Método que llama al método getCalendarios del Manager correspondiente
 	 * @param nombreUsuario nombre del usuario que efectua la acción
-	 * @param calendario calendario especifico que se desea 0 es todos, 1 es lunes,2 es martes....7 es domingo
 	 * @param tipo que base de datos se utiliza
 	 * @return devuelve los calendarios que tiene el usuario
-	 * @throws IOException 
 	 */
 	public ArrayList<Calendario> getCalendarios (String nombreUsuario,short tipo) {
 		ArrayList<Calendario> calendarios=new ArrayList<Calendario>();
@@ -232,6 +234,7 @@ public class Manager {
 				calendarios=dbMysql.getCalendarios(nombreUsuario);
 				break;
 			case 4:
+				hibernateCreate();
 				calendarios=hibernate.getCalendarios(nombreUsuario);
 				break;
 		}
@@ -243,7 +246,6 @@ public class Manager {
 	 * @param registro nombre del registro a eliminar
 	 * @param dia que dia se modificará, para saber que calendario modificar
 	 * @param tipo que base de datos se utiliza
-	 * @throws IOException 
 	 */
 	public void borrarRegistroCalendario (String nombreUsuario,String registro,String dia,short tipo)  {
 		switch(tipo){
@@ -257,6 +259,7 @@ public class Manager {
 			dbMysql.borrarRegistroCalendario(nombreUsuario,dia,registro);
 			break;
 		case 4:
+			hibernateCreate();
 			hibernate.borrarRegistroCalendario(nombreUsuario,dia,registro);
 			break;
 		}
@@ -267,7 +270,6 @@ public class Manager {
 	 * @param registro nombre del registro que se añadirá al calendario
 	 * @param dia que dia se modificará, para saber que calendario modificar
 	 * @param tipo base de datos que se utiliza
-	 * @throws IOException 
 	 */
 	public void nuevoRegistroCalendario (String nombreUsuario,String registro,String dia,short tipo){
 		switch(tipo){
@@ -281,6 +283,7 @@ public class Manager {
 				dbMysql.nuevoRegistroCalendario(nombreUsuario,dia,registro);
 				break;
 			case 4:
+				hibernateCreate();
 				hibernate.nuevoRegistroCalendario(nombreUsuario,dia,registro);
 				break;
 		}
@@ -291,7 +294,6 @@ public class Manager {
 	 * @param nombreUsuario nombre del usuario que está utilizando la aplicación
 	 * @param tipo base de datos que se utiliza
 	 * @return devuelve una lista de series
-	 * @throws IOException
 	 */
 	public ArrayList<Serie> getRecomendacionesAmigos (String nombreUsuario,short tipo) {
 		ArrayList<Serie> series=new ArrayList<Serie>();
@@ -306,6 +308,7 @@ public class Manager {
 				series=dbMysql.getRecomendacionesAmigos(nombreUsuario);
 				break;
 			case 4:
+				hibernateCreate();
 				series=hibernate.getRecomendacionesAmigos(nombreUsuario);
 				break;
 		}

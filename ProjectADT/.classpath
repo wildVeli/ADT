@@ -2,12 +2,23 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/MySQL JDBC Driver"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/HibernateLib"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
 	<classpathentry kind="lib" path="ojdbc6.jar"/>
 	<classpathentry kind="lib" path="mongo-java-driver-3.4.1.jar"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.38-bin.jar"/>
+	<classpathentry kind="lib" path="src/antlr-2.7.7.jar"/>
+	<classpathentry kind="lib" path="src/classmate-1.3.0.jar"/>
+	<classpathentry kind="lib" path="src/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="src/geronimo-jta_1.1_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="src/hibernate-commons-annotations-5.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="src/hibernate-core-5.1.12.Final.jar"/>
+	<classpathentry kind="lib" path="src/hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="src/jandex-2.0.3.Final.jar"/>
+	<classpathentry kind="lib" path="src/javassist-3.20.0-GA.jar"/>
+	<classpathentry kind="lib" path="src/jboss-logging-3.3.0.Final.jar"/>
+	<classpathentry kind="lib" path="src/slf4j-api-1.7.21.jar"/>
+	<classpathentry kind="lib" path="src/slf4j-simple-1.7.21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 09-feb-2018 19:51:00 by Hibernate Tools 5.2.8.Final -->
+<hibernate-mapping>
+ <class catalog="XE" name="clasesHibernate.Usuarios" table="usuarios">
+  <id name="id" type="string">
+   <column length="30" name="id"/>
+   <generator class="assigned"/>
+  </id>
+  <property generated="never" lazy="false" name="password" type="string">
+   <column name="password" not-null="true"/>
+  </property>
+ </class>
+</hibernate-mapping>

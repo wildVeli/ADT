@@ -74,7 +74,6 @@ public class JDialogNuevoLista extends JDialog {
 	 * Crea el dialogo que usa para modificar registros de contenidos del usuario, se accede desde el panel de Listado
 	 * @param accion indica la funcionalidad con la que se abrirá la ventana , "Modificar" en el caso de 1 solo parametro
 	 * @param tipoContenidoAModificar especifica si es "Serie" ,"Película", "Libro" o "Música" el contenido que se va a modificar
-	 * @param contenido contenido que se va a modificar
 	 */
 	public JDialogNuevoLista(String accion,String tipoContenidoAModificar,Contenido contenidoAModificar) {
 

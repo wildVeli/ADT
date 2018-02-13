@@ -126,20 +126,15 @@ end;
 CREATE OR REPLACE PROCEDURE crearUsuario (idv varchar2, passv varchar2)
 is
 begin
-	/*
+	
 	INSERT INTO usuarios VALUES(idv,passv,
 	tabla_anidadaAmigos(),
 	tabla_anidadaSeries(),
 	tabla_anidadaMusica(),
 	tabla_anidadaLibros(),
 	tabla_anidadaPeliculas());
-	*/
-	INSERT INTO usuarios VALUES(idv,passv,
-	tabla_anidadaAmigos(tipoAmigos('juan')),
-	tabla_anidadaSeries(tipoSeries('house','fantasia',1,8,4)),
-	tabla_anidadaMusica(tipoMusica('chocolate','metal',1,8,'cancion','baby metal')),
-	tabla_anidadaLibros(tipoLibros('cincuenta sombras de grey','novela erotica',0,1,'E.L.James')),
-	tabla_anidadaPeliculas(tipoPeliculas('pesadillas antes de navidad','fantasia',1,10,'Henry Selick')));
+	
+
 end;
 /
 --------contenido
@@ -147,6 +142,7 @@ end;
 
 /
 /*----------------CONSULTAS----------------*/
+/*
 --Borrar contenido concreto
 DELETE from table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido where lower(contenido.nombre) like lower('"+nombreContenido+"');
 --getContenidoDeUnTipo
@@ -164,3 +160,4 @@ UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombre
 						+ "where lower(contenido.nombre) like lower('"+serie.getNombre()+"');
 --anadirNuevoContenido
 insert into TABLE (SELECT seriesAni from usuarios where lower(id) like lower('juan')) values(tabla_anidadaSeries(tipoSeries('house','fantasia',1,8,4)));
+*/
