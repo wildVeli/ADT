@@ -9,5 +9,20 @@
 	<classpathentry kind="lib" path="ojdbc6.jar"/>
 	<classpathentry kind="lib" path="mongo-java-driver-3.4.1.jar"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.38-bin.jar"/>
+	<classpathentry kind="lib" path="antlr-2.7.7.jar"/>
+	<classpathentry kind="lib" path="classmate-1.3.0.jar"/>
+	<classpathentry kind="lib" path="db.properties"/>
+	<classpathentry kind="lib" path="dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="geronimo-jta_1.1_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="hibernate-commons-annotations-5.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="hibernate-core-5.1.12.Final.jar"/>
+	<classpathentry kind="lib" path="hibernate-jpa-2.1-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="hibernate.reveng.xml"/>
+	<classpathentry kind="lib" path="jandex-2.0.3.Final.jar"/>
+	<classpathentry kind="lib" path="javassist-3.20.0-GA.jar"/>
+	<classpathentry kind="lib" path="jboss-logging-3.3.0.Final.jar"/>
+	<classpathentry kind="lib" path="miglayout-src.zip"/>
+	<classpathentry kind="lib" path="slf4j-api-1.7.21.jar"/>
+	<classpathentry kind="lib" path="slf4j-simple-1.7.21.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -107,11 +107,13 @@ public class JPanelCalendario extends JPanel {
 				System.out.println("row count "+tableModel.getRowCount());
 				row = new Vector <String>();
 			}
+			
 			asignarModelosConDatos(tableModel,calendario.getDia());		
 			tableModel = new DefaultTableModel();
 			tableModel.addColumn("Series");
 
 		}
+
 		
 	}
 

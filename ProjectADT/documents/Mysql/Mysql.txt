@@ -176,7 +176,7 @@ ALTER TABLE `usuarios`
  
  
 --------------------------------------------------------Consultas
-
+/*
 --Comprobar usuario
 SELECT count(*) FROM usuarios WHERE lower(id) like ? and lower(passsword) like ?;
 
@@ -215,3 +215,4 @@ SELECT * from calendarios where lower(id) like ? order by dia;
 DELETE FROM calendarios where lower(id) like ? and lower(dia) like ? and lower(serie) like ?;
 --Nuevo registro calendarios
 insert into calendarios values (?,?,?);
+*/

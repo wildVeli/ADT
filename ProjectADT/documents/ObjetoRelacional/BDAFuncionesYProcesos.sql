@@ -126,14 +126,14 @@ end;
 CREATE OR REPLACE PROCEDURE crearUsuario (idv varchar2, passv varchar2)
 is
 begin
-	/*
+	
 	INSERT INTO usuarios VALUES(idv,passv,
 	tabla_anidadaAmigos(),
 	tabla_anidadaSeries(),
 	tabla_anidadaMusica(),
 	tabla_anidadaLibros(),
 	tabla_anidadaPeliculas());
-	*/
+	
 
 end;
 /
@@ -142,6 +142,7 @@ end;
 
 /
 /*----------------CONSULTAS----------------*/
+/*
 --Borrar contenido concreto
 DELETE from table (select "+tipo+" from usuarios where lower(id) like lower('"+nombreUsuario+"')) contenido where lower(contenido.nombre) like lower('"+nombreContenido+"');
 --getContenidoDeUnTipo
@@ -159,3 +160,4 @@ UPDATE table (select "+tipo+" from usuarios where lower(id) like lower('"+nombre
 						+ "where lower(contenido.nombre) like lower('"+serie.getNombre()+"');
 --anadirNuevoContenido
 insert into TABLE (SELECT seriesAni from usuarios where lower(id) like lower('juan')) values(tabla_anidadaSeries(tipoSeries('house','fantasia',1,8,4)));
+*/
