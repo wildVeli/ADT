@@ -134,12 +134,7 @@ begin
 	tabla_anidadaLibros(),
 	tabla_anidadaPeliculas());
 	*/
-	INSERT INTO usuarios VALUES(idv,passv,
-	tabla_anidadaAmigos(tipoAmigos('juan')),
-	tabla_anidadaSeries(tipoSeries('house','fantasia',1,8,4)),
-	tabla_anidadaMusica(tipoMusica('chocolate','metal',1,8,'cancion','baby metal')),
-	tabla_anidadaLibros(tipoLibros('cincuenta sombras de grey','novela erotica',0,1,'E.L.James')),
-	tabla_anidadaPeliculas(tipoPeliculas('pesadillas antes de navidad','fantasia',1,10,'Henry Selick')));
+
 end;
 /
 --------contenido
