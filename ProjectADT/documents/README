@@ -10,12 +10,11 @@ nombre bases de datos
 
 -------Apuntes----------
 ---Solo utilizo un archivo de db.properties para conectar las distintas bases de datos, se deberá por tanto cambiar
-datos como el puerto segun que puerto se encuentre instalado la base de datos, si es necesario
+datos como el puerto segun que puerto se encuentre instalado la base de datos, si es necesario(o si se cambia el nombre de la base de datos o algo para el testeo).
 
 ---La tabla de contenidos no se actualiza sola al añadir,modificar y recomendar, se debe dar a buscar de nuevo
 
--Hibernate
-Existe un bug por el cual si se borra la ultima serie de un calendarios no se actualiza bien,
+-Existe un bug por el cual si se borra la ultima serie de un calendarios no se actualiza bien,
 solo se actualiza bien en caso de haber más de un calendario.
 
 Si se sale y entra de la aplicación funciona correctamente y recoge bien de nuevo los calendarios
